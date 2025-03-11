@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Исходные файлы">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Файлы заголовков">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Файлы ресурсов">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Исходные файлы\console">
+      <UniqueIdentifier>{a17eefc1-8e28-44e7-b718-92d69c19d8f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\menu">
+      <UniqueIdentifier>{dbbd5d3d-6b6e-4f65-ae8b-4fac3cd00a41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Game">
+      <UniqueIdentifier>{ab68fb29-e1c3-40b0-9261-63f48cfd5aa8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Game\game">
+      <UniqueIdentifier>{fface1d5-3336-44be-9758-8cf080094f19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Game\source">
+      <UniqueIdentifier>{5d6bd920-62a6-48e4-9531-f2116dbdae72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Game\art">
+      <UniqueIdentifier>{70b677f7-0368-4c19-8513-7e9c3e8abec6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="seaWar.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="source\art\art.cpp">
+      <Filter>Исходные файлы\Game\art</Filter>
+    </ClCompile>
+    <ClCompile Include="source\console\console.cpp">
+      <Filter>Исходные файлы\console</Filter>
+    </ClCompile>
+    <ClCompile Include="source\menu\menu.cpp">
+      <Filter>Исходные файлы\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Source.cpp">
+      <Filter>Исходные файлы\Game\source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\art\art.h">
+      <Filter>Исходные файлы\Game\art</Filter>
+    </ClInclude>
+    <ClInclude Include="source\console\console.h">
+      <Filter>Исходные файлы\console</Filter>
+    </ClInclude>
+    <ClInclude Include="source\menu\menu.h">
+      <Filter>Исходные файлы\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="source.h">
+      <Filter>Исходные файлы\Game\source</Filter>
+    </ClInclude>
+    <ClInclude Include="Game struct.h">
+      <Filter>Исходные файлы\Game\game</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
