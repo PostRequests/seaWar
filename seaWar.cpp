@@ -10,8 +10,10 @@ void main2();
 
 int main()
 {
-    system("pause>null");
-    main2();
+    system("chcp 1251 > null");
+    manualPlacement({ 18,15 });
+    //system("pause>null");
+    //main2();
    
 }
 

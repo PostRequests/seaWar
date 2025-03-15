@@ -1,4 +1,5 @@
 ﻿#include "art.h"
+#include "../../Game struct.h"
 #include <iostream>
 #include <Windows.h>
 
@@ -126,4 +127,36 @@ void printGameRules(Coordinate coordinate) {
     system("pause");
     drawEmptyRectangle(coordinate.x, coordinate.y, 17, 200);
     setCursorPosition(0,0);
+}
+void showT(Coordinate co, int** table) {
+    ColorANSI3b color;
+    setCursorPosition(co.x + 2, co.y);
+    std::cout << "  А Б В Г Д Е Ж З И К"; //ToDo
+    //std::cout << "  0 1 2 3 4 5 6 7 8 9";
+    for (int i = 1; i <= fieldSize; i++){
+        setCursorPosition(co.x, co.y + i );
+        std::cout << i;
+    }
+    co.x+=3;
+    co.y++;
+    setCursorPosition(co);
+    // Рисуем синие клетки
+    setColor(color.BlueBG);
+    for (int i = 0; i < fieldSize; i++)
+        for (int j = 0; j < fieldSize; j++) 
+            if (!table[i][j]) {
+                setCursorPosition(co.x + (j *2), co.y + i);
+                std::cout << skinSea;
+            }
+    //Рисуем зеленые клетки 
+    setColor(color.GreenBG);
+    for (int i = 0; i < fieldSize; i++)
+        for (int j = 0; j < fieldSize; j++) 
+            if (table[i][j]) {
+                setCursorPosition(co.x + (j * 2), co.y + i);
+                std::cout << skinShip;
+            }
+        
+    resetColor();
+    setCursorPosition({ 0,0 });
 }

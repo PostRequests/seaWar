@@ -56,7 +56,8 @@ char convertKey(char key) {
     case 't': case -97: case -123: return 't';
     case 'r': case -86: case -118: return 'r';
     case 'f': case -64: case -32: return 'f';
-    case 13: return 13;
+    case 13: return 13; //enter
+    case 32: return 32; //Пробел
     default: return 0;
     }
 }
