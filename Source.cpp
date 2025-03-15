@@ -59,48 +59,49 @@ Menu getOptionMenu() {
 	addHeadMenu(m, startHead, headMenu, marginHead, true, colorHead);
 	return m;
 }
-bool getOption(myOption &gOption) {
-	Menu MO = getOptionMenu();
+bool GameModeMenu(Menu &MO, myOption& gOption) {
 	Coordinate CS = getConsoleSize();
-	while (true)
-	{
-		const char* a[] = { "Человек – компьютер",
+	const char* a[] = { "Человек – компьютер",
 		"Компьютер – компьютер",
 		"Назад", };
-		MO.start.x = CS.x / 2 - MO.width / 2;
-		reConstructMenu(MO, a, 3, "     Режимы игры     ");
-		
-		int in = getShowMenu(MO);
-		if (in == 2) break;
-		gOption.humanPlay = !in;
-		
-		while (true)
-		{
-			const char* a[] = { "Игрок расставляет вручную", "Компьютер расставляет за игрока", "Назад" };
-			MO.start.x = CS.x / 2 - MO.width / 2 - 5;
-			reConstructMenu(MO, a, 3, "     Расстановка кораблей:     ");
-			
-			int in = getShowMenu(MO);
-			if (in == 2) break;
-			gOption.shipPos = in;
-			
-			while (true)
-			{
-				const char* a[] = { "   Легко  ", "Средне", "Назад" };
-				MO.start.x = CS.x / 2 - MO.width / 2 + 10;
-				reConstructMenu(MO, a, 3, "Сложность:");
-				
-				int in = getShowMenu(MO);
-				if (in == 2) break;
-				gOption.difficulty = in;
-				std::cout << "humanPlay " << gOption.humanPlay << " shipPos " << gOption.shipPos << " shipPos " << gOption.difficulty;
-				return true; //Опции выбраны
-			}
-		}
+	reConstructMenu(MO, a, 3, "     Режимы игры     ");
+	int out = getShowMenu(MO);
+	if (out == 2) return false;
+	else if (out or !out) {
+		gOption.humanPlay = !out;
+		if (!out) return shipPos(MO, gOption);
+		else return DifficultyLevel(MO, gOption);
 	}
-	return false; //Опции не заполнены
-	
-	
+	return false;
+}
+bool shipPos(Menu& MO, myOption& gOption) {
+	Coordinate CS = getConsoleSize();
+	const char* a[] = { "Игрок расставляет вручную", "Компьютер расставляет за игрока", "Назад" };
+	reConstructMenu(MO, a, 3, "     Расстановка кораблей:     ");
+	int out = getShowMenu(MO);
+	if (out == 2) GameModeMenu(MO, gOption);
+	else if (out or !out) {
+		gOption.shipPos = !out;
+		DifficultyLevel(MO, gOption);
+	}
+	return true;
+}
+bool DifficultyLevel(Menu& MO, myOption& gOption) {
+	Coordinate CS = getConsoleSize();
+	const char* a[] = { "   Легко  ", "Средне", "Назад" };
+	reConstructMenu(MO, a, 3, "Сложность:");
+	int out = getShowMenu(MO);
+	if (out == 2)
+		if (gOption.humanPlay)
+			shipPos(MO, gOption);
+		else GameModeMenu(MO, gOption);
+	else
+		gOption.difficulty = out;
+	return true;
+}
+bool getOption(myOption &gOption) {
+	Menu MO = getOptionMenu();
+	return GameModeMenu(MO, gOption); 
 }
 void clearTable(int** table) {
 	for (int i = 0; i < fieldSize; i++)

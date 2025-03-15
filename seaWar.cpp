@@ -11,9 +11,8 @@ void main2();
 int main()
 {
     system("chcp 1251 > null");
-    manualPlacement({ 18,15 });
-    //system("pause>null");
-    //main2();
+    //manualPlacement({ 18,15 });
+    main2();
    
 }
 
@@ -26,13 +25,14 @@ void main2() {
     
     printSheep({ CS.x / 2 - 16, CS.y - 17 });
     Menu main = getMainMenu();
-
     while (true)
     {
         int in = getShowMenu(main);
         if (in == 0)
-            if (getOption(opt)) //Заканчиваем цикл опций?
+            if (getOption(opt)) { //Заканчиваем цикл опций?
+                std::cout << "Успешно";
                 break;
+            }
         if (in == 1) {
             Coordinate c = { CS.x / 2 - 25, cLog.y + 8};
             printGameRules(c);
@@ -40,7 +40,10 @@ void main2() {
         if (in == 2)
             break;
     }
-
+    if (opt.shipPos) {
+        Coordinate pl{ CS.x / 2 - (fieldSize), 12 };
+        manualPlacement(pl);
+    }
     
 }
 
