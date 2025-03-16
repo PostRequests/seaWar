@@ -143,7 +143,8 @@ void numToColor(int num) {
 	{
 	case 0:	setColor(c.BlueBG);	break;
 	case 1:	setColor(c.GreenBG); break;
-	case 2:	setColor(c.WhiteBG); break;
+	case 2:	setColor(c.CyanBG); break;
+	case 3:	setColor(c.RedBG); break;
 	default:
 		break;
 	}

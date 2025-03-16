@@ -12,9 +12,9 @@ int main()
 {
     srand(time(0));
     system("chcp 1251 > null");
-    manualPlacement({1,1});
-    //randPlacement();
-    //main2();
+    //manualPlacement({1,1}); //Ручная расстановка
+    //randPlacement();//Случайная расстановка
+    main2();
    
 }
 
@@ -43,8 +43,8 @@ void main2() {
             break;
     }
     if (opt.shipPos) {
-        Coordinate pl{ CS.x / 2 - (fieldSize), 12 };
-        manualPlacement(pl);
+        printPlacementRulles({CS.x / 2 - 40, 16});
+        manualPlacement({ CS.x / 2, 12 });
     }
     
 }

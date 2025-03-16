@@ -1,8 +1,8 @@
 ﻿#include "art.h"
 #include "../../Game struct.h"
+//#include "../../source.h"
 #include <iostream>
 #include <Windows.h>
-
 
 
 void printSheep(Coordinate coordinate) {
@@ -127,6 +127,17 @@ void printGameRules(Coordinate coordinate) {
     system("pause");
     drawEmptyRectangle(coordinate.x, coordinate.y, 17, 200);
     setCursorPosition(0,0);
+}
+void printPlacementRulles(Coordinate cp) {
+    setCursorPosition(cp);
+    std::cout << "Правила размещения кораблей";
+    setCursorPosition(cp.x, ++cp.y);
+    setCursorPosition(cp.x, ++cp.y);
+    std::cout << "Места соприкосновения кораблей: ";// << numToColor(2) << numToCharShip(2);
+    setCursorPosition(cp.x, ++cp.y);
+    std::cout << "Корабль нельзя разместить: ";// << numToColor(2) << numToCharShip(1);
+    setCursorPosition(cp.x, ++cp.y);
+    std::cout << "Корабль можно разместить: ";// << numToColor(2) << numToCharShip(1);
 }
 void showT(Coordinate co, int** table) {
     ColorANSI3b color;
