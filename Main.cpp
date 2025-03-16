@@ -10,9 +10,11 @@ void main2();
 
 int main()
 {
+    srand(time(0));
     system("chcp 1251 > null");
-    //manualPlacement({ 18,15 });
-    main2();
+    manualPlacement({1,1});
+    //randPlacement();
+    //main2();
    
 }
 

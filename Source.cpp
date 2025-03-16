@@ -59,6 +59,9 @@ Menu getOptionMenu() {
 	addHeadMenu(m, startHead, headMenu, marginHead, true, colorHead);
 	return m;
 }
+char rndChar(const char t[], int count) {
+	return t[rand() % count];
+}
 bool GameModeMenu(Menu &MO, myOption& gOption) {
 	Coordinate CS = getConsoleSize();
 	const char* a[] = { "Человек – компьютер",
@@ -208,10 +211,12 @@ void initShip(int** m, cShip* ship, int lenShip, Coordinate coor) {
 	ds.x--;	ds.y--;	de.x++;	de.y++;
 	int dist = 2; //Это номер ориола
 	numToColor(dist);
+
 	for (int y = ds.y; y < de.y + 1; y++) {
 		for (int x = ds.x; x < de.x + 1; x++) {
 			if (x >= 0 && x < fieldSize && y >= 0 && y < fieldSize && !m[x][y]) {
 				m[x][y] = dist;
+				if (coor.x == -1) continue;
 				setCursorPosition(coor.x + (x * 2), coor.y + y);
 				std::cout << skinToDo;
 				
@@ -219,12 +224,22 @@ void initShip(int** m, cShip* ship, int lenShip, Coordinate coor) {
 		}
 	}
 }
+bool isEmpty(int** m, cShip* ship, int lenShip) {
+	//Проверяем в границах ли поля корабль
+	if (ship[lenShip - 1].x >= fieldSize or ship[lenShip - 1].y >= fieldSize)
+		return false;
+	//Проверяем, пусто ли место установки
+	for (int j = 0; j < lenShip; j++)
+		if (m[ship[j].x][ship[j].y])
+			return false;
+	return true;
+}
 int** manualPlacement(Coordinate coor){
 	ColorANSI3b col;
 	int** m = new int* [fieldSize];
-	char orientation = 'h'; //Ориентация v - вертикальная h - горизонтальная 
 	for (int i = 0; i < fieldSize; ++i) 
 		m[i] = new int[fieldSize] {0}; 
+	char orientation = 'h'; //Ориентация v - вертикальная h - горизонтальная 
 	showT(coor, m);
 	coor.x += 3;
 	coor.y+=1;
@@ -240,13 +255,8 @@ int** manualPlacement(Coordinate coor){
 			ship[j].y = fieldSize / 2;
 		}
 		//Определяем свободно ли место, для закраски различными цветами
-		bool isEmpty = true;
-		for (int j = 0; j < lenShip; j++)
-			if (m[ship[j].x][ship[j].y]) {
-				isEmpty = false;
-				break;
-			}
-		setColor(((isEmpty) ? col.GreenBG : col.RedBG));
+		bool iEmpty = isEmpty(m, ship, lenShip);
+		setColor(((iEmpty) ? col.GreenBG : col.RedBG));
 		for (int j = 0; j < lenShip; j++)
 		{
 			setCursorPosition(coor.x + (ship[j].x * 2), coor.y + ship[j].y);
@@ -284,20 +294,20 @@ int** manualPlacement(Coordinate coor){
 				isMoowe = true;
 			}
 			else if (key == 13) {//Enter
-				if (isEmpty) {
+				if (iEmpty) {
 					initShip(m, ship, lenShip, coor);
 					break;
 				}
 			}
 			if (isMoowe) {
 				//Определяем свободно ли место, для закраски различными цветами
-				isEmpty = true;
+				iEmpty = true;
 				for (int j = 0; j < lenShip; j++)
 					if (m[ship[j].x][ship[j].y]) {
-						isEmpty = false;
+						iEmpty = false;
 						break;
 					}
-				setColor(((isEmpty) ? col.GreenBG : col.RedBG));
+				setColor(((iEmpty) ? col.GreenBG : col.RedBG));
 				for (int j = 0; j < lenShip; j++)
 				{
 					setCursorPosition(coor.x + (ship[j].x * 2), coor.y + ship[j].y);
@@ -314,4 +324,31 @@ int** manualPlacement(Coordinate coor){
 	drawEmptyRectangle(coor.x - 3, coor.y - 1, fieldSize + 1, (fieldSize + 2) * 2);
 	system("pause>null");
 	return m;
+}
+int** randPlacement() {
+	//Создаем поле
+	int** m = new int* [fieldSize];
+	for (int i = 0; i < fieldSize; ++i)
+		m[i] = new int[fieldSize] {0};
+
+	int len = sizeof(shipSize) / sizeof(shipSize[0]);
+	for (int i = 0; i < len; i++) {
+		int lenShip = shipSize[i];
+		cShip* ship = new cShip[lenShip];
+		do{
+			char orientation = rndChar("vh", 2);
+			int rnd1 = rand() % fieldSize;
+			int rnd2 = rand() % fieldSize;
+			for (int j = 0; j < lenShip; j++)
+			{
+				ship[j].x = rnd1 + ((orientation == 'v') ? j : 0);
+				ship[j].y = rnd2 + ((orientation == 'h') ? j : 0);
+			}
+		}while (!isEmpty(m, ship, lenShip));
+		initShip(m, ship, lenShip, { -1,-1 });
+	}
+	resetColor();
+	showT({1,1}, m);
+	return m;
+	
 }

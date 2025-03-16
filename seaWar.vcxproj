@@ -127,7 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="seaWar.cpp" />
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="source\art\art.cpp" />
     <ClCompile Include="source\console\console.cpp" />

@@ -144,7 +144,7 @@ void showT(Coordinate co, int** table) {
     setColor(color.BlueBG);
     for (int i = 0; i < fieldSize; i++)
         for (int j = 0; j < fieldSize; j++) 
-            if (!table[i][j]) {
+            if (!table[i][j] or table[i][j] == 2) {
                 setCursorPosition(co.x + (j *2), co.y + i);
                 std::cout << skinSea;
             }
@@ -152,7 +152,7 @@ void showT(Coordinate co, int** table) {
     setColor(color.GreenBG);
     for (int i = 0; i < fieldSize; i++)
         for (int j = 0; j < fieldSize; j++) 
-            if (table[i][j]) {
+            if (table[i][j] == 1) {
                 setCursorPosition(co.x + (j * 2), co.y + i);
                 std::cout << skinShip;
             }

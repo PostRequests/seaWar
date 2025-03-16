@@ -11,3 +11,5 @@ void numToColor(int num);
 bool GameModeMenu(Menu& MO, myOption& gOption);
 bool DifficultyLevel(Menu& MO, myOption& gOption);
 bool shipPos(Menu& MO, myOption& gOption);
+char rndChar(const char t[], int count);
+int** randPlacement();
