@@ -15,7 +15,7 @@ int main()
     system("chcp 1251 > null");
     /*Отладка*/
     myOption opt;
-    opt.humanPlay = true;
+    opt.humanPlay = false;
     Game g;
     Coordinate CS = getConsoleSize();
     Coordinate cLog = { CS.x / 2 - 25, 1 };
@@ -101,17 +101,18 @@ void main2() {
     g.p1.map.m = map1;
     g.p1.map.pos = {m1};
     g.p2.map.m = map2;
+    g.p2.map.pos = { m2 };
     if (g.option.humanPlay) {//Если играет человек, заполняем пустую карту для стрельбы
         int** map3 = new int* [fieldSize];
         for (int i = 0; i < fieldSize; ++i)
             map3[i] = new int[fieldSize] {0};
         g.mapGhost.m = map3;
         g.mapGhost.pos = m2;
-
+        
     }
-    else {//Если играют компы не скрываем их карту
-        g.p2.map.pos = {m2};
-    }
+    //else {//Если играют компы не скрываем их карту
+    //   
+    //}
     startGame(g);
 }
 

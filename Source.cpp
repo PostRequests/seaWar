@@ -492,7 +492,6 @@ void stupidBotPlay(Player& player, Player& opponent) {
 	
 	
 }
-
 void humanPlay(Player& player, Player& opponent) {
 	while (true)
 	{
