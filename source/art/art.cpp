@@ -150,12 +150,14 @@ void printPlacementRulles(Coordinate cp) {
 }
 void showT(Coordinate co, int** table) {
     ColorANSI3b color;
-    setCursorPosition(co.x + 2, co.y);
+    setCursorPosition(co.x + 3, co.y);
     //std::cout << "  А Б В Г Д Е Ж З И К"; //ToDo
-    std::cout << "  0 1 2 3 4 5 6 7 8 9";
-    for (int i = 0; i <= fieldSize; i++){
+    for (int i = 0; i < fieldSize; i++)
+        std::cout << " " << char('А' + i);
+    //std::cout << "  0 1 2 3 4 5 6 7 8 9";
+    for (int i = 0; i <= fieldSize-1; i++){
         setCursorPosition(co.x, co.y + i +1 );
-        std::cout << i;
+        std::cout << i + 1;
     }
     co.x+=3;
     co.y++;

@@ -288,7 +288,7 @@ void initShip(int** m, eShip* ship, int lenShip, Coordinate coor) {
 				m[x][y] = dist;
 				if (coor.x == -1) continue;
 				setCursorPosition(coor.x + (x * 2), coor.y + y);
-				std::cout << skinToDo;
+				std::cout << skinMiss;
 
 			}
 		}
@@ -322,9 +322,10 @@ void numToColor(int num) {
 	ColorANSI3b c;
 	switch (num) {
 	case 0:	setColor(c.BlueBG);	break;
-	case 1:	setColor(c.GreenBG); break;
+	case 1:	setColor(c.YellowBG); break;
 	case 2:	setColor(c.CyanBG); break;
 	case 3:	setColor(c.RedBG); break;
+	case 4:	setColor(c.GreenBG); break;
 	}
 }
 char rndChar(const char t[], int count) {
@@ -338,7 +339,7 @@ const char* numToCharShip(int num) {
 	case 1:
 		return skinShip;
 	case 2:
-		return skinToDo;
+		return skinMiss;
 	default:
 		break;
 	}
@@ -446,14 +447,13 @@ fShip isShipDestroyed(int** m, Coordinate cFier) {
 	
 	return result;
 }
-
 void showGame(Game& g) {
 	showT(g.p1.map.pos, g.p1.map.m);
 	if (g.option.humanPlay) 
 		showT(g.mapGhost.pos, g.mapGhost.m);
 	else
 		showT(g.p2.map.pos, g.p2.map.m);
-
+	
 }
 void delPrioritetAll(Coordinate* &pri, int &count) {
 	delete[] pri;
@@ -484,7 +484,6 @@ void fier(Player& player, Player& opponent, Coordinate cFier) {
 	}
 }
 void stupidBotPlay(Player& player, Player& opponent) {
-	int otladka = player.cPri1;
 	int r = rand() % player.cPri1;
 	Coordinate randFier = player.pri1[r];
 	DelPrioritet(player.pri1, player.cPri1, r);
@@ -492,6 +491,57 @@ void stupidBotPlay(Player& player, Player& opponent) {
 	
 	
 	
+}
+
+void humanPlay(Player& player, Player& opponent) {
+	while (true)
+	{
+		ColorANSI3b c;
+		setCursorPosition(player.aim.x * 2 + opponent.map.pos.x + 3,
+			player.aim.y + opponent.map.pos.y + 1);
+		int num = opponent.map.m[player.aim.y][player.aim.x];
+		((num != 2 or num != 0) ? numToColor(3) : numToColor(4));
+		std::cout << skinAim;
+
+		char key = catchKey();
+		if (!key ) continue;
+		bool mowe = false;
+		setCursorPosition(player.aim.x *2 + opponent.map.pos.x + 3,
+			player.aim.y + opponent.map.pos.y + 1);
+		numToColor(num);
+		std::cout << numToCharShip(num);
+		if (key == 'w' and player.aim.y - 1 != -1) {
+			!mowe;
+			player.aim.y--;
+		}else if (key == 's' and player.aim.y + 1 < fieldSize) {
+			!mowe;
+			player.aim.y++;
+		}
+		else if (key == 'a' and player.aim.x - 1 != -1) {
+			!mowe;
+			player.aim.x--;
+		}
+		else if (key == 'd' and player.aim.x + 1 < fieldSize) {
+			!mowe;
+			player.aim.x++;
+		}
+		else if (key == 13) {
+			break;
+		}
+		else if (key == 27) {
+			continue;
+		}
+		
+		if (mowe) {
+			setCursorPosition(player.aim.x * 2 + opponent.map.pos.x + 3,
+				player.aim.y + opponent.map.pos.y + 1);
+			int num = opponent.map.m[player.aim.y][player.aim.x];
+			((num != 2 or num != 3) ? numToColor(3) : numToColor(4));
+			std::cout << skinAim;
+			resetColor();
+		}
+			
+	}
 }
 void createPriPlayer(Player& p) {
 	p.ch = 0;
@@ -519,6 +569,7 @@ void creatingPlayers(Game& g) {
 	}
 	
 	if (g.option.humanPlay) {//Игроку приоритеты не нужны
+		g.p1.action = humanPlay;
 		return;
 	} 
 
@@ -535,7 +586,16 @@ void startGame(Game &g) {
 	int countShip = sizeof(shipSize) / sizeof(shipSize[0]);
 	while ( true )
 	{
-		Sleep(10);
+		setCursorPosition(0, 0);
+		for (int i = 0; i < fieldSize; i++)
+		{
+			for (int j = 0; j < fieldSize; j++)
+			{
+				std::cout << g.p2.map.m[i][j];
+			}
+			std::cout << std::endl;
+		}
+		Sleep(100);
 		g.p1.action(g.p1, g.p2);
 		if (g.p1.ch == countShip) {
 			setCursorPosition(g.p1.map.pos.x + fieldSize / 2,

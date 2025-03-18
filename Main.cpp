@@ -1,4 +1,4 @@
-﻿
+﻿#include "git hub/git.h"
 #include "source/art/art.h"
 #include "source/console/console.h"
 #include "source/menu/menu.h"
@@ -10,10 +10,12 @@ void main2();
 
 int main()
 {
+    gitPush("Делаю");
     srand(time(0));
     system("chcp 1251 > null");
     /*Отладка*/
     myOption opt;
+    opt.humanPlay = true;
     Game g;
     Coordinate CS = getConsoleSize();
     Coordinate cLog = { CS.x / 2 - 25, 1 };
@@ -44,7 +46,7 @@ int main()
             map3[i] = new int[fieldSize] {0};
         g.mapGhost.m = map3;
         g.mapGhost.pos = m2;
-
+        g.p2.map.pos = { m2 };
     }
     else {//Если играют компы не скрываем их карту
         g.p2.map.pos = { m2 };

@@ -48,6 +48,9 @@
     <ClCompile Include="Source.cpp">
       <Filter>Исходные файлы\Game\source</Filter>
     </ClCompile>
+    <ClCompile Include="git hub\git.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\art\art.h">
@@ -64,6 +67,9 @@
     </ClInclude>
     <ClInclude Include="Game struct.h">
       <Filter>Исходные файлы\Game\game</Filter>
+    </ClInclude>
+    <ClInclude Include="git hub\git.h">
+      <Filter>Исходные файлы</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

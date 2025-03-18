@@ -9,7 +9,8 @@ const int shipSize[] = { 4, 3, 3, 2, 2, 2, 1, 1, 1, 1}; //Размеры кораблей
 
 const char skinSea[] = "..";
 const char skinShip[] = "[]";
-const char skinToDo[] = "**";
+const char skinMiss[] = "**";
+const char skinAim[] = "><";
 //позиция элемента корабля
 struct eShip {
 	int x;
@@ -33,6 +34,7 @@ struct Player {
 	int cPri2 = 0;//Количество приоритетов 2
 	MyMap map;//Карта
 	int ch = 0;//Количество подбитых кораблей
+	Coordinate aim{fieldSize/2,fieldSize/2};
 };
 
 struct Game {

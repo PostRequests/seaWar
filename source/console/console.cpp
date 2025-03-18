@@ -58,6 +58,7 @@ char convertKey(char key) {
     case 'f': case -64: case -32: return 'f';
     case 13: return 13; //enter
     case 32: return 32; //Пробел
+    case 27: return 27; //ESC
     default: return 0;
     }
 }
