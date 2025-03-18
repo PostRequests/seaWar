@@ -13,9 +13,10 @@ int main()
     gitPush("Делаю");
     srand(time(0));
     system("chcp 1251 > null");
+    //FullScreenMode();
     /*Отладка*/
     myOption opt;
-    opt.humanPlay = false;
+    opt.humanPlay = true;
     Game g;
     Coordinate CS = getConsoleSize();
     Coordinate cLog = { CS.x / 2 - 25, 1 };

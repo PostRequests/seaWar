@@ -470,12 +470,13 @@ void fier(Player& player, Player& opponent, Coordinate cFier) {
 		numToColor(3);
 		std::cout << numToCharShip(1);
 		opponent.map.m[cFier.y][cFier.x] = 3; //Обозначаем что корабль подбит
-		fShip shipStrike = isShipDestroyed(opponent.map.m, cFier);
-		if (shipStrike.count) {
-			player.ch++;
-			delClearAndOther(player,opponent, shipStrike);
+		if (player.pri1) {
+			fShip shipStrike = isShipDestroyed(opponent.map.m, cFier);
+			if (shipStrike.count) {
+				player.ch++;
+				delClearAndOther(player, opponent, shipStrike);
+			}
 		}
-			
 	}
 	else {
 		numToColor(2);
@@ -496,48 +497,63 @@ void humanPlay(Player& player, Player& opponent) {
 	while (true)
 	{
 		ColorANSI3b c;
-		setCursorPosition(player.aim.x * 2 + opponent.map.pos.x + 3,
-			player.aim.y + opponent.map.pos.y + 1);
-		int num = opponent.map.m[player.aim.y][player.aim.x];
-		((num != 2 or num != 0) ? numToColor(3) : numToColor(4));
-		std::cout << skinAim;
+		
 
 		char key = catchKey();
 		if (!key ) continue;
 		bool mowe = false;
-		setCursorPosition(player.aim.x *2 + opponent.map.pos.x + 3,
-			player.aim.y + opponent.map.pos.y + 1);
-		numToColor(num);
-		std::cout << numToCharShip(num);
+		Coordinate temp = player.aim;
+		
 		if (key == 'w' and player.aim.y - 1 != -1) {
-			!mowe;
+			mowe = true;
 			player.aim.y--;
 		}else if (key == 's' and player.aim.y + 1 < fieldSize) {
-			!mowe;
+			mowe = true;
 			player.aim.y++;
 		}
 		else if (key == 'a' and player.aim.x - 1 != -1) {
-			!mowe;
+			mowe = true;
 			player.aim.x--;
 		}
 		else if (key == 'd' and player.aim.x + 1 < fieldSize) {
-			!mowe;
+			mowe = true;
 			player.aim.x++;
 		}
 		else if (key == 13) {
-			break;
+			int num = opponent.map.m[player.aim.y][player.aim.x];
+			if (num == 1 or num == 0) {
+				fier(player, opponent, { temp.x, temp.y });
+				break;
+			}
+				
 		}
 		else if (key == 27) {
 			continue;
 		}
 		
 		if (mowe) {
+			int num = opponent.map.m[temp.y][temp.x];
+			setCursorPosition(temp.x * 2 + opponent.map.pos.x + 3,
+				temp.y + opponent.map.pos.y + 1);
+			if (num == 0 or num == 1) {
+				numToColor(0);
+				std::cout << skinSea;
+			}
+			else {
+				numToColor(num);
+				std::cout << numToCharShip(num);
+			}
 			setCursorPosition(player.aim.x * 2 + opponent.map.pos.x + 3,
 				player.aim.y + opponent.map.pos.y + 1);
-			int num = opponent.map.m[player.aim.y][player.aim.x];
-			((num != 2 or num != 3) ? numToColor(3) : numToColor(4));
-			std::cout << skinAim;
-			resetColor();
+			num = opponent.map.m[player.aim.y][player.aim.x];
+			if (num == 0 or num == 1) {
+				setColor(c.GreenBG);
+				std::cout << skinSea;
+			}
+			else {
+				setColor(c.RedBG);
+				std::cout << numToCharShip(num);
+			}
 		}
 			
 	}
