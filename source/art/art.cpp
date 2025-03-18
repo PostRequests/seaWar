@@ -133,19 +133,28 @@ void printPlacementRulles(Coordinate cp) {
     std::cout << "Правила размещения кораблей";
     setCursorPosition(cp.x, ++cp.y);
     setCursorPosition(cp.x, ++cp.y);
-    std::cout << "Места соприкосновения кораблей: ";// << numToColor(2) << numToCharShip(2);
+    std::cout << "Места соприкосновения кораблей: ";
+    numToColor(2);
+    std::cout<< numToCharShip(2);
+    resetColor();
     setCursorPosition(cp.x, ++cp.y);
-    std::cout << "Корабль нельзя разместить: ";// << numToColor(2) << numToCharShip(1);
+    std::cout << "Корабль нельзя разместить: ";
+    numToColor(3);
+    std::cout << numToCharShip(1);
+    resetColor();
     setCursorPosition(cp.x, ++cp.y);
-    std::cout << "Корабль можно разместить: ";// << numToColor(2) << numToCharShip(1);
+    std::cout << "Корабль можно разместить: ";
+    numToColor(1);
+    std::cout<< numToCharShip(1);
+    resetColor();
 }
 void showT(Coordinate co, int** table) {
     ColorANSI3b color;
     setCursorPosition(co.x + 2, co.y);
-    std::cout << "  А Б В Г Д Е Ж З И К"; //ToDo
-    //std::cout << "  0 1 2 3 4 5 6 7 8 9";
-    for (int i = 1; i <= fieldSize; i++){
-        setCursorPosition(co.x, co.y + i );
+    //std::cout << "  А Б В Г Д Е Ж З И К"; //ToDo
+    std::cout << "  0 1 2 3 4 5 6 7 8 9";
+    for (int i = 0; i <= fieldSize; i++){
+        setCursorPosition(co.x, co.y + i +1 );
         std::cout << i;
     }
     co.x+=3;
@@ -156,7 +165,7 @@ void showT(Coordinate co, int** table) {
     for (int i = 0; i < fieldSize; i++)
         for (int j = 0; j < fieldSize; j++) 
             if (!table[i][j] or table[i][j] == 2) {
-                setCursorPosition(co.x + (j *2), co.y + i);
+                setCursorPosition(co.x + (j *2), co.y + i );
                 std::cout << skinSea;
             }
     //Рисуем зеленые клетки 

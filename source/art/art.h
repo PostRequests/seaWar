@@ -10,3 +10,5 @@ void printLog(Coordinate coordinate);
 void printPlacementRulles(Coordinate cp);
 void printGameRules(Coordinate coordinate);
 void showT(Coordinate coordinate, int** table);
+void numToColor(int num);
+const char* numToCharShip(int num);
