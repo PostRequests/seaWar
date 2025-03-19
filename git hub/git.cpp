@@ -28,3 +28,7 @@ void gitPush(const char* text) {
     system("git status");
     delete[] temp;
 }
+void gitHardReset() {
+    system("git reset --hard");
+    system("git pull");
+}
