@@ -336,6 +336,7 @@ const char* numToCharShip(int num) {
 	{
 	case 0:
 		return skinSea;
+	case 3:
 	case 1:
 		return skinShip;
 	case 2:
