@@ -10,7 +10,7 @@ void main2();
 
 int main()
 {
-    gitPush("Делаю");
+    gitPush("Перед реконструкцией");
     srand(time(0));
     system("chcp 1251 > null");
     //FullScreenMode();

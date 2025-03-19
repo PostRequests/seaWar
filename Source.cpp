@@ -471,12 +471,10 @@ void fier(Player& player, Player& opponent, Coordinate cFier) {
 		numToColor(3);
 		std::cout << numToCharShip(1);
 		opponent.map.m[cFier.y][cFier.x] = 3; //Обозначаем что корабль подбит
-		if (player.pri1) {
-			fShip shipStrike = isShipDestroyed(opponent.map.m, cFier);
-			if (shipStrike.count) {
-				player.ch++;
-				delClearAndOther(player, opponent, shipStrike);
-			}
+		fShip shipStrike = isShipDestroyed(opponent.map.m, cFier);
+		if (shipStrike.count) {
+			player.ch++;
+			delClearAndOther(player, opponent, shipStrike);
 		}
 	}
 	else {
@@ -498,7 +496,18 @@ void humanPlay(Player& player, Player& opponent) {
 	while (true)
 	{
 		ColorANSI3b c;
-		
+		int num = opponent.map.m[player.aim.y][player.aim.x];
+		setCursorPosition(player.aim.x * 2 + opponent.map.pos.x + 3,
+			player.aim.y + opponent.map.pos.y + 1);
+		num = opponent.map.m[player.aim.y][player.aim.x];
+		if (num == 0 or num == 1) {
+			setColor(c.GreenBG);
+			std::cout << skinSea;
+		}
+		else {
+			setColor(c.RedBG);
+			std::cout << numToCharShip(num);
+		}
 
 		char key = catchKey();
 		if (!key ) continue;
