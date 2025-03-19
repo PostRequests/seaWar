@@ -1,9 +1,38 @@
 ﻿#include "art.h"
 #include "../../Game struct.h"
-//#include "../../source.h"
 #include <iostream>
 #include <Windows.h>
 
+void draws() {
+    BorderCP866 bord;
+    Coordinate CS = getConsoleSize();
+    std::cout << "x = " << CS.x << " y = " << CS.y; //250x67
+    if (CS.x > 200) {
+        drawVerticalLine({ CS.x / 4, 0 }, bord.V2, CS.y);
+        drawVerticalLine({ CS.x - CS.x / 4, 0 }, bord.V2, CS.y);
+        Coordinate cLog = { CS.x / 2 - 25, 2 };
+        printLog(cLog);
+        printSheep({ CS.x / 4 - (CS.x / 4 / 2) - 16, CS.y / 3});
+        printSheep({ CS.x - (CS.x / 4 / 2) - 16, CS.y / 3 });
+    }
+    if (CS.y > 40) {
+        setCursorPosition(0, CS.y - CS.y / 5);
+        system("chcp 866>null");
+        printRowChars(CS.x, bord.H2);
+        system("chcp 1251>null");
+    }
+    
+}
+void drawVerticalLine(Coordinate c, char e, int s) {
+    system("chcp 866 > nul");
+    setCursorPosition(c);
+    for (int i = 0; i < s + 1; i++)
+    {
+        std::cout << e;
+        setCursorPosition(c.x, c.y + i);
+    }
+    system("chcp 1251>nul");
+}
 
 void printSheep(Coordinate coordinate) {
     system("chcp 866>null");
@@ -152,8 +181,9 @@ void showT(Coordinate co, int** table) {
     ColorANSI3b color;
     setCursorPosition(co.x + 3, co.y);
     //std::cout << "  А Б В Г Д Е Ж З И К"; //ToDo
-    for (int i = 0; i < fieldSize; i++)
+    for (int i = 0; i < fieldSize - 1; i++)
         std::cout << " " << char('А' + i);
+    std::cout << " " << "К";
     //std::cout << "  0 1 2 3 4 5 6 7 8 9";
     for (int i = 0; i <= fieldSize-1; i++){
         setCursorPosition(co.x, co.y + i +1 );

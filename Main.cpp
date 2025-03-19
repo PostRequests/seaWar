@@ -10,19 +10,18 @@ void main2();
 
 int main()
 {
-    gitPush("Перед реконструкцией");
+    gitPush("Изменил графику");
     srand(time(0));
     system("chcp 1251 > null");
-    //FullScreenMode();
+    FullScreenMode();
+    draws();
     /*Отладка*/
     myOption opt;
     opt.humanPlay = true;
     Game g;
     Coordinate CS = getConsoleSize();
-    Coordinate cLog = { CS.x / 2 - 25, 1 };
-    printLog(cLog);
+    
 
-    printSheep({ CS.x / 2 - 16, CS.y - 17 });
     Menu main = getMainMenu();
     
     int** map1;
