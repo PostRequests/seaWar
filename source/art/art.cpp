@@ -6,7 +6,6 @@
 void draws() {
     BorderCP866 bord;
     Coordinate CS = getConsoleSize();
-    std::cout << "x = " << CS.x << " y = " << CS.y; //250x67
     if (CS.x > 200) {
         drawVerticalLine({ CS.x / 4, 0 }, bord.V2, CS.y);
         drawVerticalLine({ CS.x - CS.x / 4, 0 }, bord.V2, CS.y);
@@ -154,7 +153,7 @@ void printGameRules(Coordinate coordinate) {
         setCursorPosition(coordinate.x, ++y);
     }
     system("pause");
-    drawEmptyRectangle(coordinate.x, coordinate.y, 17, 200);
+    drawEmptyRectangle(coordinate, { coordinate.x + 80, coordinate.y + 17},0);
     setCursorPosition(0,0);
 }
 void printPlacementRulles(Coordinate cp) {

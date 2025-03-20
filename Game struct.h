@@ -12,7 +12,7 @@ const char skinShip[] = "[]";
 const char skinMiss[] = "**";
 const char skinAim[] = "><";
 
-struct fShip {
+struct Ship {
 	Coordinate* ch;
 	int count;
 };
@@ -30,6 +30,7 @@ struct Player {
 	MyMap map;//Карта
 	int ch = 0;//Количество подбитых кораблей
 	Coordinate aim{fieldSize/2,fieldSize/2};
+	int sh = 0; //Количество выстрелов
 };
 
 struct Game {

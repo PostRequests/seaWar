@@ -379,7 +379,7 @@ void addElShip(Coordinate* &s, int &c, Coordinate n) {
 	s = newS;
 	c++;
 }
-void delClearAndOther(Player& player, Player& opponent, fShip ship) {
+void delClearAndOther(Player& player, Player& opponent, Ship ship) {
 	int shift[8][2] = {	{1, 0}, {-1, 0}, {0, -1},{0, 1},{-1, -1},{-1, 1},{1, -1}, {1, 1} };
 	for (int sh = 0; sh < ship.count; sh++)
 	{
@@ -408,7 +408,7 @@ void delClearAndOther(Player& player, Player& opponent, fShip ship) {
 	}
 	
 }
-fShip isShipDestroyed(int** m, Coordinate cFier) {
+Ship isShipDestroyed(int** m, Coordinate cFier) {
 	int shift[4][2] = { {1, 0},{-1, 0},{0, -1},{0, 1} };
 	Coordinate* ship = nullptr;
 	int count = 0;
@@ -433,7 +433,7 @@ fShip isShipDestroyed(int** m, Coordinate cFier) {
 	}
 	int isDead = true;
 	
-	fShip result;
+	Ship result;
 	result.ch = ship;
 	result.count = count;
 	//Определяем уничтожен ли корабль
@@ -472,7 +472,7 @@ bool fier(Player& player, Player& opponent, Coordinate cFier) {
 		numToColor(3);
 		std::cout << numToCharShip(1);
 		opponent.map.m[cFier.y][cFier.x] = 3; //Обозначаем что корабль подбит
-		fShip shipStrike = isShipDestroyed(opponent.map.m, cFier);
+		Ship shipStrike = isShipDestroyed(opponent.map.m, cFier);
 		if (shipStrike.count) {
 			player.ch++;
 			delClearAndOther(player, opponent, shipStrike);
@@ -575,6 +575,7 @@ bool humanPlay(Player& player, Player& opponent) {
 }
 void createPriPlayer(Player& p) {
 	p.ch = 0;
+	p.sh = 0;
 	int priSize = fieldSize * fieldSize;//Количество элементов приоритете
 	//Очищаем память, если осталась
 	if (p.pri1) 	delPrioritetAll(p.pri1, p.cPri1);
@@ -583,6 +584,7 @@ void createPriPlayer(Player& p) {
 	p.cPri2 = priSize;
 	p.pri1 = new Coordinate[priSize];
 	p.cPri1 = priSize;
+
 	int iter = 0;
 	//Разделяем диагонали по приоритетам
 	for (int y = 0; y < fieldSize; y++)
@@ -598,17 +600,17 @@ void creatingPlayers(Game& g) {
 		g.p2.action = stupidBotPlay;
 	}
 	
-	if (g.option.humanPlay) {//Игроку приоритеты не нужны
+	if (g.option.humanPlay) {
 		g.p1.action = humanPlay;
-		return;
+		createPriPlayer(g.p2);
 	} 
+	else {
+		createPriPlayer(g.p1);
+		if (g.option.difficulty) {
+			g.p1.action = stupidBotPlay;
+		}
 
-	createPriPlayer(g.p1);
-	if (g.option.difficulty) {
-		g.p1.action = stupidBotPlay;
 	}
-	
-				
 }
 void startGame(Game &g) {
 	showGame(g);
@@ -616,15 +618,6 @@ void startGame(Game &g) {
 	int countShip = sizeof(shipSize) / sizeof(shipSize[0]);
 	while ( true )
 	{
-		setCursorPosition(0, 0);
-		for (int i = 0; i < fieldSize; i++)
-		{
-			for (int j = 0; j < fieldSize; j++)
-			{
-				std::cout << g.p2.map.m[i][j];
-			}
-			std::cout << std::endl;
-		}
 		Sleep(100);
 		while(g.p1.action(g.p1, g.p2));//Не прекращаем стрелять если попадаем
 		if (g.p1.ch == countShip) {

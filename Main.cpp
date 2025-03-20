@@ -10,7 +10,7 @@ void main2();
 
 int main()
 {
-    gitPush("Убран баг повторной стрельбы");
+    gitPush("Удалил вспомогательные элементы");
     srand(time(0));
     system("chcp 1251 > null");
     FullScreenMode();
@@ -34,11 +34,10 @@ void main2() {
         int in = getShowMenu(main);
         if (in == 0)
             if (getOption(opt)) { //Заканчиваем цикл опций?
-                std::cout << "Успешно";
                 break;
             }
         if (in == 1) {
-            Coordinate c = { CS.x / 2 - 25, cLog.y + 8};
+            Coordinate c = { CS.x / 2 - 35, cLog.y + 8};
             printGameRules(c);
         }
         if (in == 2)
@@ -47,8 +46,9 @@ void main2() {
     int** map1;
     int** map2;
     if (opt.shipPos) {
-        printPlacementRulles({CS.x / 2 - 40, 16});
-        map1 = manualPlacement({ CS.x / 2, 12 });
+        printPlacementRulles({CS.x / 2 - 10, 16 + fieldSize});
+        map1 = manualPlacement({ CS.x / 2 - fieldSize / 2 - 3, 12 });
+        drawEmptyRectangle({ CS.x / 2 - 10, 16 + fieldSize }, { CS.x / 2 + 25, 16 + fieldSize + 6 }, 0);
     }
     else 
         map1 = randPlacement();
