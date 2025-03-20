@@ -2,7 +2,7 @@
 #include <iostream>
 
 
-void clearMenu(Menu& m) {
+void clearMenu(Menu1& m) {
 	for (int i = 0; i < m.count; i++) {
 		delete[] m.item[i];
 	}
@@ -29,7 +29,7 @@ void setItemColor(int color1, int color2) {
 	else resetColor();
 }
 //Перерисовываем выделенный элемент меню
-void redrawItem(Menu m) {
+void redrawItem(Menu1 m) {
 	if (m.border) (m.start.x++, m.start.y++);
 	m.start.y += (m.n) * (m.lineSkip + 1);
 	setCursorPosition(m.start);
@@ -41,7 +41,7 @@ void redrawItem(Menu m) {
 /// Печатает элементы меню на экране
 /// </summary>
 /// <param name="m">Структура меню</param>
-void showItemMenu(Menu m) {
+void showItemMenu(Menu1 m) {
 	m.visible = true;
 	if (m.border) {
 		m.finish = { m.start.x + m.width - 1,
@@ -81,8 +81,8 @@ void showItemMenu(Menu m) {
 	setCursorPosition(0, 0);
 	resetColor();
 }
-void addHeadMenu(Menu& m, Coordinate start, char* head, int margin[4], bool border, menuColor color) {
-	Head &H = m.head; //Для сокращения текста
+void addHeadMenu(Menu1& m, Coordinate start, char* head, int margin[4], bool border, menuColor1 color) {
+	Head1 &H = m.head; //Для сокращения текста
 
 	//Если не задана цветовая палитра, берет палитру из основного меню
 	if (color.BG) H.color = color; 
@@ -102,8 +102,8 @@ void addHeadMenu(Menu& m, Coordinate start, char* head, int margin[4], bool bord
 	H.finish = { H.start.x + H.width - 1,
 							H.start.y + H.height - 1 };
 }
-void addInfoMenu(Menu& m, Coordinate start, Coordinate finish, const char** textInfo, bool border, menuColor color) {
-	Info& I = m.info;//Для сокращения текста
+void addInfoMenu(Menu1& m, Coordinate start, Coordinate finish, const char** textInfo, bool border, menuColor1 color) {
+	Info1& I = m.info;//Для сокращения текста
 
 	//Если не задана цветовая палитра, берет палитру из основного меню
 	if (color.BG) m.info.color = color;
@@ -121,21 +121,21 @@ void addInfoMenu(Menu& m, Coordinate start, Coordinate finish, const char** text
 		strcpy_s(I.text[i], strlen(textInfo[i]) + 1, textInfo[i]);
 	}
 }
-void clsMenu(Menu &m) {
+void clsMenu(Menu1 &m) {
 	drawEmptyRectangle(m.start.x, m.start.y, m.height, m.width);
 	setCursorPosition(1, 1);
 	m.visible = false;
 	m.n = 0;
 }
-void clsHead(Menu& m) {
+void clsHead(Menu1& m) {
 	drawEmptyRectangle(m.head.start, m.head.finish, 0);
 	m.head.visible = false;
 }
-void clsInfo(Menu& m) {
+void clsInfo(Menu1& m) {
 	drawEmptyRectangle(m.info.start, m.info.finish, 0);
 	m.info.visible = false;
 }
-void showHeadMenu(Head h) {
+void showHeadMenu(Head1 h) {
 	setCursorPosition(h.start);
 	if (h.border) {//Рисуем рамку, если она есть
 		setItemColor(h.color.BG, h.color.borderFG);
@@ -159,7 +159,7 @@ int getLengthNextWord(char* t) {
 	for (; *t && *t != ' '; len++, t++);
 	return len;
 }
-void showIfoMenu(Menu m) {
+void showIfoMenu(Menu1 m) {
 	setItemColor(m.info.color.BG, m.info.color.FG);
 	setCursorPosition(m.info.start);
 	if (m.head.border) {//Рисуем рамку, если она есть
@@ -203,7 +203,7 @@ void showIfoMenu(Menu m) {
 	}
 	resetColor();
 }
-int getShowMenu(Menu &m, bool closeEnd) {
+int getShowMenu(Menu1 &m, bool closeEnd) {
 	if (!m.visible) {
 		showItemMenu(m);
 		m.visible = true;
@@ -248,7 +248,7 @@ int getShowMenu(Menu &m, bool closeEnd) {
 		}
 	}
 }
-void constructMenu(Menu &m,Coordinate start, const char** item, int count, menuColor color, int lineSkip, char place, bool border) {
+void constructMenu(Menu1 &m,Coordinate start, const char** item, int count, menuColor1 color, int lineSkip, char place, bool border) {
 	m.start = start;
 	m.count = count;
 	m.n = 0;
@@ -315,7 +315,7 @@ void constructMenu(Menu &m,Coordinate start, const char** item, int count, menuC
 		}
 	m.item = pItem;
 }
-void reConstructMenu(Menu& m, const char** item, int count, const char* header, const char place) {
+void reConstructMenu(Menu1& m, const char** item, int count, const char* header, const char place) {
 	int maxWidthItem = strlen(item[0]); //Ширина самого длинного элемента меню в символах
 	m.count = count;
 	//Вычисляем длину самого длинного элемента
@@ -383,7 +383,7 @@ void reConstructMenu(Menu& m, const char** item, int count, const char* header, 
 	m.item = pItem;
 
 	if (header) {
-		Head& H = m.head;
+		Head1& H = m.head;
 		H.start = { m.start.x, m.start.y - 3 };
 		delete[] H.text;
 		H.text = new char[(strlen(header) + 1)];//Выделяю память

@@ -6,7 +6,7 @@
 #include <iostream>
 #include <Windows.h>
 /*---------Меню---------*/
-Menu getMainMenu() {
+Menu1 getMainMenu() {
 	ColorANSI3b c;
 	Coordinate cSize = getConsoleSize(); //Максимальный размер консоли
 	//Формируем элементы меню
@@ -18,12 +18,12 @@ Menu getMainMenu() {
 	};
 	Coordinate startMenu = { 0,  0 };
 	int countMenu = sizeof(item) / sizeof(item[0]);
-	menuColor colorMenu = { 0,0,0,c.BlackFG, c.BlueBG };
-	Menu m;
+	menuColor1 colorMenu = { 0,0,0,c.BlackFG, c.BlueBG };
+	Menu1 m;
 	constructMenu(m, startMenu, item, countMenu, colorMenu, 1, 'c', true);
 	m.start = { cSize.x / 2 - m.width/2,  cSize.y / 3 };
 	//Формируем шапку меню
-	menuColor colorHead = { 0,0, 0 };
+	menuColor1 colorHead = { 0,0, 0 };
 	Coordinate startHead = { m.start.x,m.start.y - 3 };
 	int s = strlen(headMenu) / 2;
 	int indent = (cSize.x / 2) - s - 2;
@@ -33,7 +33,7 @@ Menu getMainMenu() {
 	addHeadMenu(m, startHead, headMenu, marginHead, true, colorHead);
 	return m;
 }
-Menu getOptionMenu() {
+Menu1 getOptionMenu() {
 	ColorANSI3b c;
 	Coordinate cSize = getConsoleSize(); //Максимальный размер консоли
 	//Формируем элементы меню
@@ -45,12 +45,12 @@ Menu getOptionMenu() {
 	};
 	Coordinate startMenu = { 0,  0 };
 	int countMenu = sizeof(item) / sizeof(item[0]);
-	menuColor colorMenu = { 0,0,0,c.BlackFG, c.BlueBG };
-	Menu m;
+	menuColor1 colorMenu = { 0,0,0,c.BlackFG, c.BlueBG };
+	Menu1 m;
 	constructMenu(m, startMenu, item, countMenu, colorMenu, 1, 'c', true);
 	m.start = { cSize.x / 2 - m.width / 2,  cSize.y / 3 };
 	//Формируем шапку меню
-	menuColor colorHead = { 0,0, 0 };
+	menuColor1 colorHead = { 0,0, 0 };
 	Coordinate startHead = { m.start.x,m.start.y - 3 };
 	int s = strlen(headMenu) / 2;
 	int indent = (cSize.x / 2) - s - 2;
@@ -61,10 +61,10 @@ Menu getOptionMenu() {
 	return m;
 }
 bool getOption(myOption& gOption) {
-	Menu MO = getOptionMenu();
+	Menu1 MO = getOptionMenu();
 	return GameModeMenu(MO, gOption);
 }
-bool GameModeMenu(Menu& MO, myOption& gOption) {
+bool GameModeMenu(Menu1& MO, myOption& gOption) {
 	Coordinate CS = getConsoleSize();
 	const char* a[] = { "Человек – компьютер",
 		"Компьютер – компьютер",
@@ -79,7 +79,7 @@ bool GameModeMenu(Menu& MO, myOption& gOption) {
 	}
 	return false;
 }
-bool shipPos(Menu& MO, myOption& gOption) {
+bool shipPos(Menu1& MO, myOption& gOption) {
 	Coordinate CS = getConsoleSize();
 	const char* a[] = { "Игрок расставляет вручную", "Компьютер расставляет за игрока", "Назад" };
 	reConstructMenu(MO, a, 3, "     Расстановка кораблей:     ");
@@ -91,7 +91,7 @@ bool shipPos(Menu& MO, myOption& gOption) {
 	}
 	return true;
 }
-bool DifficultyLevel(Menu& MO, myOption& gOption) {
+bool DifficultyLevel(Menu1& MO, myOption& gOption) {
 	Coordinate CS = getConsoleSize();
 	const char* a[] = { "   Легко  ", "Средне", "Назад" };
 	reConstructMenu(MO, a, 3, "Сложность:");
@@ -119,7 +119,7 @@ int** manualPlacement(Coordinate coor) {
 	for (int i = 0; i < len; i++)
 	{
 		int lenShip = shipSize[i];
-		eShip* ship = new eShip[lenShip];
+		Coordinate* ship = new Coordinate[lenShip];
 		//Создаем корабль в центре поля
 		for (int j = 0; j < lenShip; j++)
 		{
@@ -206,7 +206,7 @@ int** randPlacement() {
 	int len = sizeof(shipSize) / sizeof(shipSize[0]);
 	for (int i = 0; i < len; i++) {
 		int lenShip = shipSize[i];
-		eShip* ship = new eShip[lenShip];
+		Coordinate* ship = new Coordinate[lenShip];
 		do {
 			char orientation = rndChar("vh", 2);
 			int rnd1 = rand() % fieldSize;
@@ -224,14 +224,14 @@ int** randPlacement() {
 	return m;
 
 }
-void moveShip(eShip*& ship, int size, int d1, int d2) {
+void moveShip(Coordinate*& ship, int size, int d1, int d2) {
 	for (int i = 0; i < size; i++)
 	{
 		ship[i].x += d1;
 		ship[i].y += d2;
 	}
 }
-void clsSheep(int** m, eShip*& ship, int size, Coordinate coor) {
+void clsSheep(int** m, Coordinate*& ship, int size, Coordinate coor) {
 	for (int i = 0; i < size; i++)
 	{
 		numToColor(m[ship[i].x][ship[i].y]);
@@ -239,7 +239,7 @@ void clsSheep(int** m, eShip*& ship, int size, Coordinate coor) {
 		std::cout << numToCharShip(m[ship[i].x][ship[i].y]);
 	}
 }
-void rotationS(eShip* ship, int lenShip, char& orientation) {
+void rotationS(Coordinate* ship, int lenShip, char& orientation) {
 	if (orientation == 'h') {
 		orientation = 'v';
 		for (int j = 1; j < lenShip; j++)
@@ -265,9 +265,9 @@ void rotationS(eShip* ship, int lenShip, char& orientation) {
 				ship[i].x--;
 	}
 }
-void initShip(int** m, eShip* ship, int lenShip, Coordinate coor) {
-	eShip ds{ fieldSize , fieldSize }; //координаты начала квадрата ориола корабля
-	eShip de{ 0,0 }; //координаты конца ориола корабля
+void initShip(int** m, Coordinate* ship, int lenShip, Coordinate coor) {
+	Coordinate ds{ fieldSize , fieldSize }; //координаты начала квадрата ориола корабля
+	Coordinate de{ 0,0 }; //координаты конца ориола корабля
 	for (int i = 0; i < lenShip; i++)
 	{
 		m[ship[i].x][ship[i].y] = 1;
@@ -294,7 +294,7 @@ void initShip(int** m, eShip* ship, int lenShip, Coordinate coor) {
 		}
 	}
 }
-bool isEmpty(int** m, eShip* ship, int lenShip) {
+bool isEmpty(int** m, Coordinate* ship, int lenShip) {
 	//Проверяем в границах ли поля корабль
 	if (ship[lenShip - 1].x >= fieldSize or ship[lenShip - 1].y >= fieldSize)
 		return false;
@@ -367,8 +367,8 @@ void DelPrioritet(Coordinate*& c, int& numCoors, int numDel) {
 	Но уже много чего надо переписывать*/
 
 }
-void addElShip(eShip* &s, int &c, eShip n) {
-	eShip* newS = new eShip[c + 1];
+void addElShip(Coordinate* &s, int &c, Coordinate n) {
+	Coordinate* newS = new Coordinate[c + 1];
 	if (s) {
 		for (int i = 0; i < c; i++)
 			newS[i] = s[i];
@@ -409,7 +409,7 @@ void delClearAndOther(Player& player, Player& opponent, fShip ship) {
 }
 fShip isShipDestroyed(int** m, Coordinate cFier) {
 	int shift[4][2] = { {1, 0},{-1, 0},{0, -1},{0, 1} };
-	eShip* ship = nullptr;
+	Coordinate* ship = nullptr;
 	int count = 0;
 	addElShip(ship, count, { cFier.x, cFier.y });
 	

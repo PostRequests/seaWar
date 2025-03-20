@@ -11,14 +11,9 @@ const char skinSea[] = "..";
 const char skinShip[] = "[]";
 const char skinMiss[] = "**";
 const char skinAim[] = "><";
-//позиция элемента корабля
-struct eShip {
-	int x;
-	int y;
-};
 
 struct fShip {
-	eShip* ch;
+	Coordinate* ch;
 	int count;
 };
 struct MyMap {

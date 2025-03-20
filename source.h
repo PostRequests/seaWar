@@ -4,17 +4,17 @@
 
 /*---------Меню---------*/
 //Генерирует первое меню в игре
-Menu getMainMenu();
+Menu1 getMainMenu();
 //Генерирует меню опции в игре
-Menu getOptionMenu();
+Menu1 getOptionMenu();
 //Проходится по всем меню и формирует соответствующие настройки
 bool getOption(myOption& gOption);
 //Выбор режима игры человек, компьютер
-bool GameModeMenu(Menu& MO, myOption& gOption);
+bool GameModeMenu(Menu1& MO, myOption& gOption);
 //Выбор расстановки кораблей
-bool shipPos(Menu& MO, myOption& gOption);
+bool shipPos(Menu1& MO, myOption& gOption);
 //Выбор сложности
-bool DifficultyLevel(Menu& MO, myOption& gOption);
+bool DifficultyLevel(Menu1& MO, myOption& gOption);
 
 /*-------Расстановка кораблей-----*/
 //Ручная расстановка
@@ -22,15 +22,15 @@ int** manualPlacement(Coordinate coor);
 //Случайная расстановка
 int** randPlacement();
 //Смещает корабль в указанном направлении
-void moveShip(eShip*& ship, int size, int d1 = 0, int d2 = 0);
+void moveShip(Coordinate*& ship, int size, int d1 = 0, int d2 = 0);
 //Закрашивает место где стоял корабль, элементами которые были на карте
-void clsSheep(int** m, eShip*& ship, int size, Coordinate coor);
+void clsSheep(int** m, Coordinate*& ship, int size, Coordinate coor);
 //Поворачивает корабль оставаясь при этом в рамках поля
-void rotationS(eShip* ship, int lenShip, char& orientation);
+void rotationS(Coordinate* ship, int lenShip, char& orientation);
 //переносит на карту корабль и ориол корабля
-void initShip(int** m, eShip* ship, int lenShip, Coordinate coor);
+void initShip(int** m, Coordinate* ship, int lenShip, Coordinate coor);
 //Проверка, можно ли установить корабль в это место
-bool isEmpty(int** m, eShip* ship, int lenShip);
+bool isEmpty(int** m, Coordinate* ship, int lenShip);
 //Удаляем вспомогательные элементы с карты (2)
 void delAuxiliary(int** m);
 

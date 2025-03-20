@@ -132,12 +132,14 @@
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="source\art\art.cpp" />
     <ClCompile Include="source\console\console.cpp" />
+    <ClCompile Include="source\menu v2\menuV2.cpp" />
     <ClCompile Include="source\menu\menu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="git hub\git.h" />
     <ClInclude Include="source\art\art.h" />
     <ClInclude Include="source\console\console.h" />
+    <ClInclude Include="source\menu v2\menuV2.h" />
     <ClInclude Include="source\menu\menu.h" />
     <ClInclude Include="source.h" />
     <ClInclude Include="Game struct.h" />

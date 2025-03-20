@@ -31,6 +31,12 @@
     <Filter Include="Исходные файлы\Game\art">
       <UniqueIdentifier>{70b677f7-0368-4c19-8513-7e9c3e8abec6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\menu\menu v1">
+      <UniqueIdentifier>{a7b892f1-a3e6-427b-ba12-34d36e73b42e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\menu\menu v2">
+      <UniqueIdentifier>{3da01430-fa87-4454-9516-838c9b23c3cc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -42,14 +48,17 @@
     <ClCompile Include="source\console\console.cpp">
       <Filter>Исходные файлы\console</Filter>
     </ClCompile>
-    <ClCompile Include="source\menu\menu.cpp">
-      <Filter>Исходные файлы\menu</Filter>
-    </ClCompile>
     <ClCompile Include="Source.cpp">
       <Filter>Исходные файлы\Game\source</Filter>
     </ClCompile>
     <ClCompile Include="git hub\git.cpp">
       <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="source\menu\menu.cpp">
+      <Filter>Исходные файлы\menu\menu v1</Filter>
+    </ClCompile>
+    <ClCompile Include="source\menu v2\menuV2.cpp">
+      <Filter>Исходные файлы\menu\menu v2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -59,9 +68,6 @@
     <ClInclude Include="source\console\console.h">
       <Filter>Исходные файлы\console</Filter>
     </ClInclude>
-    <ClInclude Include="source\menu\menu.h">
-      <Filter>Исходные файлы\menu</Filter>
-    </ClInclude>
     <ClInclude Include="source.h">
       <Filter>Исходные файлы\Game\source</Filter>
     </ClInclude>
@@ -70,6 +76,12 @@
     </ClInclude>
     <ClInclude Include="git hub\git.h">
       <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="source\menu\menu.h">
+      <Filter>Исходные файлы\menu\menu v1</Filter>
+    </ClInclude>
+    <ClInclude Include="source\menu v2\menuV2.h">
+      <Filter>Исходные файлы\menu\menu v2</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
