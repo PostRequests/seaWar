@@ -111,7 +111,7 @@ int** manualPlacement(Coordinate coor) {
 	int** m = new int* [fieldSize];
 	for (int i = 0; i < fieldSize; ++i)
 		m[i] = new int[fieldSize] {0};
-	char orientation = 'v'; //ќриентаци€ v - вертикальна€ h - горизонтальна€ 
+	char orientation = 'h'; //ќриентаци€ v - вертикальна€ h - горизонтальна€ 
 	showT(coor, m);
 	coor.x += 3;
 	coor.y += 1;
@@ -175,7 +175,7 @@ int** manualPlacement(Coordinate coor) {
 				//ќпредел€ем свободно ли место, дл€ закраски различными цветами
 				iEmpty = true;
 				for (int j = 0; j < lenShip; j++)
-					if (m[ship[j].x][ship[j].y]) {
+					if (m[ship[j].y][ship[j].x]) {
 						iEmpty = false;
 						break;
 					}
@@ -234,9 +234,9 @@ void moveShip(Coordinate*& ship, int size, int d1, int d2) {
 void clsSheep(int** m, Coordinate*& ship, int size, Coordinate coor) {
 	for (int i = 0; i < size; i++)
 	{
-		numToColor(m[ship[i].x][ship[i].y]);
+		numToColor(m[ship[i].y][ship[i].x]);
 		setCursorPosition(coor.x + (ship[i].x * 2), coor.y + ship[i].y);
-		std::cout << numToCharShip(m[ship[i].x][ship[i].y]);
+		std::cout << numToCharShip(m[ship[i].y][ship[i].x]);
 	}
 }
 void rotationS(Coordinate* ship, int lenShip, char& orientation) {
@@ -271,7 +271,7 @@ void initShip(int** m, Coordinate* ship, int lenShip, Coordinate coor) {
 	Coordinate de{ 0,0 }; //координаты конца ориола корабл€
 	for (int i = 0; i < lenShip; i++)
 	{
-		m[ship[i].x][ship[i].y] = 1;
+		m[ship[i].y][ship[i].x] = 1;
 		//ќпредел€ем крайние точки координат
 		if (ds.x > ship[i].x) ds.x = ship[i].x;
 		if (de.x < ship[i].x) de.x = ship[i].x;
@@ -285,8 +285,8 @@ void initShip(int** m, Coordinate* ship, int lenShip, Coordinate coor) {
 
 	for (int y = ds.y; y < de.y + 1; y++) {
 		for (int x = ds.x; x < de.x + 1; x++) {
-			if (x >= 0 && x < fieldSize && y >= 0 && y < fieldSize && !m[x][y]) {
-				m[x][y] = dist;
+			if (x >= 0 && x < fieldSize && y >= 0 && y < fieldSize && !m[y][x]) {
+				m[y][x] = dist;
 				if (coor.x == -1) continue;
 				setCursorPosition(coor.x + (x * 2), coor.y + y);
 				std::cout << skinMiss;
@@ -301,7 +301,7 @@ bool isEmpty(int** m, Coordinate* ship, int lenShip) {
 		return false;
 	//ѕровер€ем, пусто ли место установки
 	for (int j = 0; j < lenShip; j++)
-		if (m[ship[j].x][ship[j].y])
+		if (m[ship[j].y][ship[j].x])
 			return false;
 	return true;
 }
@@ -323,7 +323,7 @@ void numToColor(int num) {
 	ColorANSI3b c;
 	switch (num) {
 	case 0:	setColor(c.BlueBG);	break;
-	case 1:	setColor(c.YellowBG); break;
+	case 1:	setColor(c.GreenBG); break;
 	case 2:	setColor(c.CyanBG); break;
 	case 3:	setColor(c.RedBG); break;
 	case 4:	setColor(c.GreenBG); break;

@@ -10,7 +10,7 @@ void main2();
 
 int main()
 {
-    gitPush("Все фигная давай по новой");
+    gitPush("Исправил баг поворота кораблей");
     srand(time(0));
     system("chcp 1251 > null");
     FullScreenMode();
