@@ -462,7 +462,7 @@ void delPrioritetAll(Coordinate* &pri, int &count) {
 	pri = nullptr;
 	count = 0;
 }
-void fier(Player& player, Player& opponent, Coordinate cFier) {
+bool fier(Player& player, Player& opponent, Coordinate cFier) {
 	int x = opponent.map.pos.x + 3;
 	int y = opponent.map.pos.y + 1;
 	setCursorPosition(cFier.x * 2 + x, cFier.y + y);
@@ -477,23 +477,28 @@ void fier(Player& player, Player& opponent, Coordinate cFier) {
 			player.ch++;
 			delClearAndOther(player, opponent, shipStrike);
 		}
+		int Cships = sizeof(shipSize) / sizeof(shipSize[0]);
+		if (player.ch != Cships)
+			return true;
+		else return false;
 	}
 	else {
 		numToColor(2);
 		std::cout << numToCharShip(2);
 		opponent.map.m[cFier.y][cFier.x] = 2; //Обозначаем что на клетке промах
+		return false;
 	}
 }
-void stupidBotPlay(Player& player, Player& opponent) {
+bool stupidBotPlay(Player& player, Player& opponent) {
 	int r = rand() % player.cPri1;
 	Coordinate randFier = player.pri1[r];
 	DelPrioritet(player.pri1, player.cPri1, r);
-	fier(player, opponent, randFier);
+	return fier(player, opponent, randFier);
 	
 	
 	
 }
-void humanPlay(Player& player, Player& opponent) {
+bool humanPlay(Player& player, Player& opponent) {
 	while (true)
 	{
 		ColorANSI3b c;
@@ -533,8 +538,7 @@ void humanPlay(Player& player, Player& opponent) {
 		else if (key == 13) {
 			int num = opponent.map.m[player.aim.y][player.aim.x];
 			if (num == 1 or num == 0) {
-				fier(player, opponent, { temp.x, temp.y });
-				break;
+				return fier(player, opponent, { temp.x, temp.y });
 			}
 				
 		}
@@ -622,7 +626,7 @@ void startGame(Game &g) {
 			std::cout << std::endl;
 		}
 		Sleep(100);
-		g.p1.action(g.p1, g.p2);
+		while(g.p1.action(g.p1, g.p2));//Не прекращаем стрелять если попадаем
 		if (g.p1.ch == countShip) {
 			setCursorPosition(g.p1.map.pos.x + fieldSize / 2,
 				g.p1.map.pos.y - 2);
@@ -630,7 +634,7 @@ void startGame(Game &g) {
 			break;
 		}
 		
-		g.p2.action(g.p2, g.p1);
+		while(g.p2.action(g.p2, g.p1));
 		if (g.p2.ch == countShip) {
 			setCursorPosition(g.p2.map.pos.x + fieldSize / 2,
 				g.p2.map.pos.y - 2);

@@ -22,7 +22,7 @@ struct MyMap {
 };
 struct Game;
 struct Player {
-	void (*action)(Player& player, Player& opponent);
+	bool (*action)(Player& player, Player& opponent);
 	Coordinate* pri1 = nullptr;//Уровень приоритета 1
 	int cPri1 = 0; //Количество приоритетов 1
 	Coordinate* pri2 = nullptr;//Уровень приоритета 2

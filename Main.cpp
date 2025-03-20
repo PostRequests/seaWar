@@ -10,7 +10,7 @@ void main2();
 
 int main()
 {
-    gitPush("Исправил баг поворота кораблей");
+    gitPush("Убран баг повторной стрельбы");
     srand(time(0));
     system("chcp 1251 > null");
     FullScreenMode();
