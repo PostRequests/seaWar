@@ -111,7 +111,7 @@ int** manualPlacement(Coordinate coor) {
 	int** m = new int* [fieldSize];
 	for (int i = 0; i < fieldSize; ++i)
 		m[i] = new int[fieldSize] {0};
-	char orientation = 'h'; //Ориентация v - вертикальная h - горизонтальная 
+	char orientation = 'v'; //Ориентация v - вертикальная h - горизонтальная 
 	showT(coor, m);
 	coor.x += 3;
 	coor.y += 1;
@@ -265,6 +265,7 @@ void rotationS(Coordinate* ship, int lenShip, char& orientation) {
 				ship[i].x--;
 	}
 }
+
 void initShip(int** m, Coordinate* ship, int lenShip, Coordinate coor) {
 	Coordinate ds{ fieldSize , fieldSize }; //координаты начала квадрата ориола корабля
 	Coordinate de{ 0,0 }; //координаты конца ориола корабля

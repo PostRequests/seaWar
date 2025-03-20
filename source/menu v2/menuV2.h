@@ -1,5 +1,5 @@
 #pragma once
-#include "../console/console.h"
+
 //+-------------------------------------------------+
 //|Не работает без подключения                      |
 //|#include "../console/console.h"                  |
@@ -14,3 +14,16 @@ struct MenuColor {
     int hiBG; //Цвет выделенного фона элемента меню
     int hiFG; //Цвет выделенного текста элемента меню
 };
+
+struct MyMenu
+{
+    Coordinate pos;//Стартовые координаты отрисовки меню
+    char* Caption = nullptr;//шапка меню
+    MyMenu* sub = nullptr;//пункты меню
+    int count_sub = 0;//количество пунктов меню
+    void (*Action)(MyMenu&, Game&) = nullptr;//действие при выборе данного пунтка меню
+    int selected = 0;//текущий пункт меню
+    MenuColor color;
+};
+
+
