@@ -15,15 +15,21 @@ struct MenuColor {
     int hiFG; //÷вет выделенного текста элемента меню
 };
 
-struct MyMenu
+struct Menu
 {
     Coordinate pos;//—тартовые координаты отрисовки меню
     char* Caption = nullptr;//шапка меню
-    MyMenu* sub = nullptr;//пункты меню
+    Menu* sub = nullptr;//пункты меню
     int count_sub = 0;//количество пунктов меню
-    void (*Action)(MyMenu&, Game&) = nullptr;//действие при выборе данного пунтка меню
+    void (*Action)(Menu&, Game&) = nullptr;//действие при выборе данного пункта меню
     int selected = 0;//текущий пункт меню
-    MenuColor color;
+    int width;
+    Game* g;
 };
 
 
+void CreateMenu(Menu& menu, const char* cap, Coordinate pos);
+void AddItemMenu(Menu& menu, const char* cap, void (*Action)(Menu&, Game& ));
+int MaxLen(Menu& menu);
+void drawMenu(Menu& menu);
+void StartMenu(Menu& menu, Game& g);

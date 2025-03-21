@@ -2,6 +2,7 @@
 #include "source/art/art.h"
 #include "source/console/console.h"
 #include "source/menu/menu.h"
+#include "source/menu v2/menuV2.h"
 #include "source.h"
 #include "Game struct.h"
 #include <iostream>
@@ -10,12 +11,10 @@ void main2();
 
 int main()
 {
-    gitPush("Удалил вспомогательные элементы");
+    gitPush("Близко к завершению");
     srand(time(0));
     system("chcp 1251 > null");
-    FullScreenMode();
-    
-
+    FullScreenMode();    
     main2();
    
 }
@@ -41,7 +40,7 @@ void main2() {
             printGameRules(c);
         }
         if (in == 2)
-            break;
+            exit(0);
     }
     int** map1;
     int** map2;
@@ -69,9 +68,7 @@ void main2() {
         g.mapGhost.pos = m2;
         
     }
-    //else {//Если играют компы не скрываем их карту
-    //   
-    //}
+    clearMenu(main);
     startGame(g);
 }
 

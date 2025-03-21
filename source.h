@@ -1,5 +1,6 @@
 #pragma once
 #include "Game struct.h"
+#include "source/menu v2/menuV2.h"
 
 
 /*---------Μενώ---------*/

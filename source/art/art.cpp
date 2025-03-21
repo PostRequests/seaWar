@@ -125,6 +125,8 @@ void printLog(Coordinate coordinate) {
     system("chcp 1251>null");
 }
 void printGameRules(Coordinate coordinate) {
+    Coordinate CS = getConsoleSize();
+    Coordinate c = { CS.x / 2 - 35, 1 + 8 };
     system("chcp 1251>nul");
     setCursorPosition(coordinate);
     const char * a[]  = {

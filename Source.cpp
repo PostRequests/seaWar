@@ -6,6 +6,19 @@
 #include <iostream>
 #include <Windows.h>
 /*---------Меню---------*/
+//Не используется
+//Menu mainMenu(Game& g) {
+//	Coordinate CS = getConsoleSize();
+//	static Menu fM;
+//	fM.g = &g;
+//
+//	CreateMenu(fM, "Морской бой", { CS.x / 2 - 6,7 });
+//	AddItemMenu(fM, "Начать игру", nullptr);
+//	AddItemMenu(fM, "Об игре", printGameRules);
+//	AddItemMenu(fM, "Выход", nullptr);
+//	StartMenu(fM, g);
+//	return fM;
+//}
 Menu1 getMainMenu() {
 	ColorANSI3b c;
 	Coordinate cSize = getConsoleSize(); //Максимальный размер консоли
@@ -614,6 +627,7 @@ void creatingPlayers(Game& g) {
 }
 void startGame(Game &g) {
 	showGame(g);
+	
 	creatingPlayers(g);
 	int countShip = sizeof(shipSize) / sizeof(shipSize[0]);
 	while ( true )
@@ -637,4 +651,7 @@ void startGame(Game &g) {
 	}
 	setCursorPosition(0,0);
 	resetColor();
+	system("cls");
+	
+	main2();
 }
