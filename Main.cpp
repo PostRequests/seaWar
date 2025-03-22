@@ -11,16 +11,19 @@ void main2();
 
 int main()
 {
-    gitPush("Близко к завершению");
+    //
+    gitPush("Все готово, осталось провести рефакторинг");
+    /*Game g;
+    menuPause(g);*/
     srand(time(0));
     system("chcp 1251 > null");
-    FullScreenMode();    
-    main2();
+   main2();
    
 }
 
 void main2() {
     FullScreenMode();
+    system("cls");
     myOption opt;
     Game g;
     Coordinate CS = getConsoleSize();

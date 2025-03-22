@@ -33,3 +33,6 @@ void AddItemMenu(Menu& menu, const char* cap, void (*Action)(Menu&, Game& ));
 int MaxLen(Menu& menu);
 void drawMenu(Menu& menu);
 void StartMenu(Menu& menu, Game& g);
+//Выход из игры
+void exitM(Menu& m, Game& g);
+void mainM(Menu& m, Game& g);

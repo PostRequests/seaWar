@@ -7,18 +7,21 @@
 #include <Windows.h>
 /*---------Меню---------*/
 //Не используется
-//Menu mainMenu(Game& g) {
-//	Coordinate CS = getConsoleSize();
-//	static Menu fM;
-//	fM.g = &g;
-//
-//	CreateMenu(fM, "Морской бой", { CS.x / 2 - 6,7 });
-//	AddItemMenu(fM, "Начать игру", nullptr);
-//	AddItemMenu(fM, "Об игре", printGameRules);
-//	AddItemMenu(fM, "Выход", nullptr);
-//	StartMenu(fM, g);
-//	return fM;
-//}
+void menuPause(Game& g, bool pause) {
+	resetColor();
+	Coordinate CS = getConsoleSize();
+	static Menu fM;
+	fM.g = &g;
+
+	CreateMenu(fM, "Меню", { CS.x / 2 - 6,CS.y - 3 *3 });
+	if(pause)
+		AddItemMenu(fM, "Продолжить", nullptr);
+	AddItemMenu(fM, "В главное меню", mainM);
+
+	AddItemMenu(fM, "Выход", exitM);
+	StartMenu(fM, g);
+	drawEmptyRectangle(fM.pos, {fM.pos.x + fM.width + 1, fM.pos.y + fM.count_sub * 2 + 4}, 0);
+}
 Menu1 getMainMenu() {
 	ColorANSI3b c;
 	Coordinate cSize = getConsoleSize(); //Максимальный размер консоли
@@ -278,7 +281,6 @@ void rotationS(Coordinate* ship, int lenShip, char& orientation) {
 				ship[i].x--;
 	}
 }
-
 void initShip(int** m, Coordinate* ship, int lenShip, Coordinate coor) {
 	Coordinate ds{ fieldSize , fieldSize }; //координаты начала квадрата ориола корабля
 	Coordinate de{ 0,0 }; //координаты конца ориола корабля
@@ -359,6 +361,34 @@ const char* numToCharShip(int num) {
 		break;
 	}
 }
+void cleanupMyMap(MyMap& map) {
+	if (map.m) {
+		for (int i = 0; i < fieldSize; i++) {
+			delete[] map.m[i]; //Освобождаем каждую строку
+		}
+		delete[] map.m; //Освобождаем массив указателей
+		map.m = nullptr;
+	}
+}
+void cleanupPlayer(Player& player) {
+	if (player.pri1) {
+		delete[] player.pri1; //Освобождаем массив приоритетов 1
+		player.pri1 = nullptr;
+		player.cPri1 = 0;
+	}
+	if (player.pri2) {
+		delete[] player.pri2; //Освобождаем массив приоритетов 2
+		player.pri2 = nullptr;
+		player.cPri2 = 0;
+	}
+	cleanupMyMap(player.map); //Освобождаем карту игрока
+}
+void cleanupGame(Game& game) {
+	cleanupMyMap(game.mapGhost); //Освобождаем пустую карту
+	cleanupPlayer(game.p1);      //Освобождаем память для игрока 1
+	cleanupPlayer(game.p2);      //Освобождаем память для игрока 2
+}
+
 
 
 /*-------Игра---------*/
@@ -380,6 +410,13 @@ void DelPrioritet(Coordinate*& c, int& numCoors, int numDel) {
 	Вообще можно было обойтись статическим массивом
 	Но уже много чего надо переписывать*/
 
+}
+void DelPrioritet(Coordinate*& c, int& numCoors, Coordinate cotDel) {
+	for (int i = 0; i < numCoors; i++)
+	{
+		if (c[i].x == cotDel.x and c[i].y == cotDel.y)
+			DelPrioritet(c, numCoors, i);
+	}
 }
 void addElShip(Coordinate* &s, int &c, Coordinate n) {
 	Coordinate* newS = new Coordinate[c + 1];
@@ -436,7 +473,7 @@ Ship isShipDestroyed(int** m, Coordinate cFier) {
 		{
 			x += shift[i][0];
 			y += shift[i][1];
-			if (x < 0 or x >= fieldSize or y < 0 or y >= fieldSize)
+			if (x < 0 or x >= fieldSize or y < 0 or y >= fieldSize) //Ограничение выхода за границы поля
 				break;
 			if (m[y][x] == 3 or m[y][x] == 1)
 				addElShip(ship, count, { x, y });
@@ -476,10 +513,15 @@ void delPrioritetAll(Coordinate* &pri, int &count) {
 	count = 0;
 }
 bool fier(Player& player, Player& opponent, Coordinate cFier) {
+	resetColor();
+	setCursorPosition(player.map.pos.x + fieldSize / 2,
+		player.map.pos.y + fieldSize + 3);
+	std::cout << "Всего ходов: " << ++player.sh;
 	int x = opponent.map.pos.x + 3;
 	int y = opponent.map.pos.y + 1;
-	setCursorPosition(cFier.x * 2 + x, cFier.y + y);
+	setCursorPosition(cFier.x * 2 + x, cFier.y + y); //Устанавливаем координаты в точке огня
 	bool isStrike = opponent.map.m[cFier.y][cFier.x] == 1;
+	
 	if (isStrike) { //Если попадание
 		
 		numToColor(3);
@@ -491,8 +533,14 @@ bool fier(Player& player, Player& opponent, Coordinate cFier) {
 			delClearAndOther(player, opponent, shipStrike);
 		}
 		int Cships = sizeof(shipSize) / sizeof(shipSize[0]);
-		if (player.ch != Cships)
+		if (player.ch != Cships) {
+			resetColor();
+			setCursorPosition(player.map.pos.x + fieldSize / 2,
+				player.map.pos.y + fieldSize + 2);
+			std::cout << "Сбито кораблей: " << player.ch;
 			return true;
+		}
+			
 		else return false;
 	}
 	else {
@@ -502,16 +550,125 @@ bool fier(Player& player, Player& opponent, Coordinate cFier) {
 		return false;
 	}
 }
-bool stupidBotPlay(Player& player, Player& opponent) {
+bool stupidBotPlay(Game& g, Player& player, Player& opponent) {
 	int r = rand() % player.cPri1;
 	Coordinate randFier = player.pri1[r];
 	DelPrioritet(player.pri1, player.cPri1, r);
 	return fier(player, opponent, randFier);
-	
-	
-	
 }
-bool humanPlay(Player& player, Player& opponent) {
+void newPrioritet(Player& player, Player& opponent, Coordinate cFier) {
+	if (player.cPri2) {//Удаляем основные приоритеты, если они есть
+		delete[] player.pri2;
+		player.pri2 = nullptr;
+		player.cPri2 = 0;
+	}
+	int shift[4][2] = { {1, 0},{-1, 0},{0, -1},{0, 1} };//Смещения  влево вправо вверх вниз
+	Coordinate* ship = nullptr;
+	int count = 0;
+	addElShip(ship, count, { cFier.x, cFier.y });
+
+	//Проверяем 4 направлнеия, для определения положения корабля
+	for (int i = 0; i < 4; i++)
+	{
+		int x = cFier.x;
+		int y = cFier.y;
+		while (true)
+		{
+			x += shift[i][0];
+			y += shift[i][1];
+			if (x < 0 or x >= fieldSize or y < 0 or y >= fieldSize) //Ограничение выхода за границы поля
+				break;
+			if (opponent.map.m[y][x] == 3) //Добавляем подбитые элементы корабля
+				addElShip(ship, count, { x, y });
+			else
+				break;
+		}
+	}
+
+	if (count == 1) {//Еще не знаем, вертикально или горизонтально расположено корабль
+		//Проверяем 4 направлнеия, для определения положения корабля
+		for (int i = 0; i < 4; i++)
+		{
+		int x = cFier.x;
+		int y = cFier.y;
+			
+		x += shift[i][0];
+		y += shift[i][1];
+		if (x < 0 or x >= fieldSize or y < 0 or y >= fieldSize) //Ограничение выхода за границы поля
+			continue;
+		if (opponent.map.m[y][x] == 0 or opponent.map.m[y][x] == 1) //Добавляем неизвестные пустые точки
+			addElShip(player.pri2, player.cPri2, { x, y });
+		}
+		return;
+	}
+	else if (ship[0].x != ship[1].x) { //Корабль находится по горизонтали
+		for (int s = 0; s < count; s++) //Проходимся по всем известным элементам корабля
+		{
+			for (int i = 0; i < 2; i++) // Смещения только по х
+			{
+			int x = ship[s].x;
+			int y = ship[s].y;
+			x += shift[i][0];
+			y += shift[i][1];
+			if (x < 0 or x >= fieldSize or y < 0 or y >= fieldSize) //Ограничение выхода за границы поля
+				continue;
+			if (opponent.map.m[y][x] == 0 or opponent.map.m[y][x] == 1) //Добавляем неизвестные пустые точки
+				addElShip(player.pri2, player.cPri2, { x, y });
+			}
+		}
+	}
+	else if (ship[0].y != ship[1].y) { //Корабль находится по вертикали
+		for (int s = 0; s < count; s++) //Проходимся по всем известным элементам корабля
+		{
+			for (int i = 2; i < 4; i++) // Смещения только по y
+			{
+			int x = ship[s].x;
+			int y = ship[s].y;
+			x += shift[i][0];
+			y += shift[i][1];
+			if (x < 0 or x >= fieldSize or y < 0 or y >= fieldSize) //Ограничение выхода за границы поля
+				continue;
+			if (opponent.map.m[y][x] == 0 or opponent.map.m[y][x] == 1) //Добавляем неизвестные пустые точки
+				addElShip(player.pri2, player.cPri2, { x, y });
+			}
+		}
+	}
+	delete[] ship;
+}
+bool botPlay(Game& g, Player& player, Player& opponent) {
+	int temp = player.ch;
+	if (player.cPri2) { //Если есть основной приоритет
+		int r = rand() % player.cPri2;
+		Coordinate randFier = player.pri2[r];
+		DelPrioritet(player.pri1, player.cPri1, randFier);//Удаляем выстрел из вторичного приоритета
+		DelPrioritet(player.pri2, player.cPri2, r);//Удаляем выстрел из основного приоритета
+		if (fier(player, opponent, randFier)) {//При попадании, формируем новый основной приоритет
+			if (player.ch != temp) { //корабль подбит
+				delete[] player.pri2;
+				player.pri2 = nullptr;
+				player.cPri2 = 0;
+			}
+			else
+				newPrioritet(player, opponent, randFier);
+			
+			return true;
+		}
+		return false;
+	}
+	else
+	{
+		int r = rand() % player.cPri1;
+		Coordinate randFier = player.pri1[r];
+		DelPrioritet(player.pri1, player.cPri1, r);//Удаляем выстрел из вторичного приоритета
+		if (fier(player, opponent, randFier)) {//При попадании, формируем новый основной приоритет
+			if (player.ch == temp) //Корабль не подбит
+				newPrioritet(player, opponent, randFier);
+			return true;
+		}
+		return false;
+	}
+}
+bool humanPlay(Game& g,Player& player, Player& opponent) {
 	while (true)
 	{
 		ColorANSI3b c;
@@ -556,7 +713,7 @@ bool humanPlay(Player& player, Player& opponent) {
 				
 		}
 		else if (key == 27) {
-			continue;
+			menuPause(g, true);
 		}
 		
 		if (mowe) {
@@ -593,8 +750,6 @@ void createPriPlayer(Player& p) {
 	//Очищаем память, если осталась
 	if (p.pri1) 	delPrioritetAll(p.pri1, p.cPri1);
 	if (p.pri2) 	delPrioritetAll(p.pri2, p.cPri2);
-	p.pri2 = new Coordinate[priSize];
-	p.cPri2 = priSize;
 	p.pri1 = new Coordinate[priSize];
 	p.cPri1 = priSize;
 
@@ -609,31 +764,51 @@ void createPriPlayer(Player& p) {
 }
 void creatingPlayers(Game& g) {
 	createPriPlayer(g.p2);
-	if (g.option.difficulty) {
+	createPriPlayer(g.p1);
+	if (g.option.difficulty) 
 		g.p2.action = stupidBotPlay;
-	}
+	else
+		g.p2.action = botPlay;
 	
 	if (g.option.humanPlay) {
 		g.p1.action = humanPlay;
-		createPriPlayer(g.p2);
 	} 
 	else {
-		createPriPlayer(g.p1);
-		if (g.option.difficulty) {
+		if (g.option.difficulty) 
 			g.p1.action = stupidBotPlay;
-		}
+		else
+			g.p1.action = stupidBotPlay;
 
 	}
 }
 void startGame(Game &g) {
 	showGame(g);
-	
+	setCursorPosition(g.p1.map.pos.x + fieldSize / 2,
+		g.p1.map.pos.y - 2);
+	std::cout << ((g.option.humanPlay) ? "Игрок" : "Бот №1");
+	setCursorPosition(g.p1.map.pos.x + fieldSize / 2,
+		g.p1.map.pos.y + fieldSize + 2);
+	std::cout << "Сбито кораблей: " << g.p1.ch;
+	setCursorPosition(g.p1.map.pos.x + fieldSize / 2,
+		g.p1.map.pos.y + fieldSize + 3);
+	std::cout << "Всего ходов: " << g.p1.sh;
+
+	setCursorPosition(g.p2.map.pos.x + fieldSize / 2,
+		g.p2.map.pos.y - 2);
+	std::cout << ((g.option.humanPlay) ? "Бот" : "Бот №2");
+	setCursorPosition(g.p2.map.pos.x + fieldSize / 2,
+		g.p2.map.pos.y + fieldSize + 2);
+	std::cout << "Сбито кораблей: " << g.p2.ch;
+	setCursorPosition(g.p2.map.pos.x + fieldSize / 2,
+		g.p2.map.pos.y + fieldSize + 3);
+	std::cout << "Всего ходов: " << g.p2.sh;
+
 	creatingPlayers(g);
 	int countShip = sizeof(shipSize) / sizeof(shipSize[0]);
 	while ( true )
 	{
 		Sleep(100);
-		while(g.p1.action(g.p1, g.p2));//Не прекращаем стрелять если попадаем
+		while(g.p1.action(g, g.p1, g.p2));//Не прекращаем стрелять если попадаем
 		if (g.p1.ch == countShip) {
 			setCursorPosition(g.p1.map.pos.x + fieldSize / 2,
 				g.p1.map.pos.y - 2);
@@ -641,7 +816,7 @@ void startGame(Game &g) {
 			break;
 		}
 		
-		while(g.p2.action(g.p2, g.p1));
+		while(g.p2.action(g, g.p2, g.p1));
 		if (g.p2.ch == countShip) {
 			setCursorPosition(g.p2.map.pos.x + fieldSize / 2,
 				g.p2.map.pos.y - 2);
@@ -649,9 +824,5 @@ void startGame(Game &g) {
 			break;
 		}
 	}
-	setCursorPosition(0,0);
-	resetColor();
-	system("cls");
-	
-	main2();
+	menuPause(g, false);
 }

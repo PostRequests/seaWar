@@ -4,12 +4,18 @@
 #include <iostream>
 #include <string>
 #include <windows.h>
-
+void mainM(Menu& m, Game& g) {
+    cleanupGame(g);
+    main2();
+}
+void exitM(Menu& m, Game& g) {
+    exit(0);
+}
 void redrawItemMenu(int c_sub_last, Menu& m) {
     ColorANSI3b c;
     int x = m.pos.x + 1;
     int y = m.pos.y + 4;
-    setCursorPosition(x + m.width / 2 - strlen(m.sub[m.selected].Caption) / 2, y + c_sub_last * 2 - 1);
+    setCursorPosition(x + m.width / 2 - strlen(m.sub[c_sub_last].Caption) / 2, y + c_sub_last * 2 - 1);
     resetColor();
     std::cout << m.sub[c_sub_last].Caption;
     setColor(c.BlueBG);
@@ -36,7 +42,10 @@ void StartMenu(Menu& menu, Game& g)
             redrawItemMenu(tempSub, menu);
             break;
         case 13:
-            menu.sub[menu.selected].Action(menu.sub[menu.selected], g);
+            if (menu.sub[menu.selected].Action)
+                menu.sub[menu.selected].Action(menu.sub[menu.selected], g);
+            else
+                return;
             break;
         }
     } while (true);

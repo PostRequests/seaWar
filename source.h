@@ -4,6 +4,7 @@
 
 
 /*---------Меню---------*/
+void menuPause(Game& g, bool pause);
 //Генерирует первое меню в игре
 Menu1 getMainMenu();
 //Генерирует меню опции в игре
@@ -45,7 +46,12 @@ void numToColor(int num);
 char rndChar(const char t[], int count);
 //Возвращает скин корабля относительно номера
 const char* numToCharShip(int num);
-
+// Функция для освобождения памяти в MyMap
+void cleanupMyMap(MyMap& map);
+// Функция для освобождения памяти в Player
+void cleanupPlayer(Player& player);
+// Функция для освобождения памяти в Game
+void cleanupGame(Game& game);
 
 /*-------Игра-------*/
 //Расставляет первоначальные приоритеты для ботов

@@ -22,7 +22,7 @@ struct MyMap {
 };
 struct Game;
 struct Player {
-	bool (*action)(Player& player, Player& opponent);
+	bool (*action)(Game& g, Player& player, Player& opponent);
 	Coordinate* pri1 = nullptr;//Уровень приоритета 1
 	int cPri1 = 0; //Количество приоритетов 1
 	Coordinate* pri2 = nullptr;//Уровень приоритета 2
@@ -41,3 +41,9 @@ struct Game {
 };
 
 void main2();
+// Функция для освобождения памяти в MyMap
+void cleanupMyMap(MyMap& map);
+// Функция для освобождения памяти в Player
+void cleanupPlayer(Player& player);
+// Функция для освобождения памяти в Game
+void cleanupGame(Game& game);
