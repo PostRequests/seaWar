@@ -6,7 +6,6 @@
 #include <iostream>
 #include <Windows.h>
 /*---------Меню---------*/
-//Не используется
 void menuPause(Game& g, bool pause) {
 	resetColor();
 	Coordinate CS = getConsoleSize();
@@ -429,7 +428,7 @@ void addElShip(Coordinate* &s, int &c, Coordinate n) {
 	s = newS;
 	c++;
 }
-void delClearAndOther(Player& player, Player& opponent, Ship ship) {
+void markAndClearShipPerimeter(Player& player, Player& opponent, Ship ship) {
 	int shift[8][2] = {	{1, 0}, {-1, 0}, {0, -1},{0, 1},{-1, -1},{-1, 1},{1, -1}, {1, 1} };
 	for (int sh = 0; sh < ship.count; sh++)
 	{
@@ -505,7 +504,25 @@ void showGame(Game& g) {
 		showT(g.mapGhost.pos, g.mapGhost.m);
 	else
 		showT(g.p2.map.pos, g.p2.map.m);
-	
+	setCursorPosition(g.p1.map.pos.x + fieldSize / 2,
+		g.p1.map.pos.y - 2);
+	std::cout << ((g.option.humanPlay) ? "Игрок" : "Бот №1");
+	setCursorPosition(g.p1.map.pos.x + fieldSize / 2,
+		g.p1.map.pos.y + fieldSize + 2);
+	std::cout << "Сбито кораблей: " << g.p1.ch;
+	setCursorPosition(g.p1.map.pos.x + fieldSize / 2,
+		g.p1.map.pos.y + fieldSize + 3);
+	std::cout << "Всего ходов: " << g.p1.sh;
+
+	setCursorPosition(g.p2.map.pos.x + fieldSize / 2,
+		g.p2.map.pos.y - 2);
+	std::cout << ((g.option.humanPlay) ? "Бот" : "Бот №2");
+	setCursorPosition(g.p2.map.pos.x + fieldSize / 2,
+		g.p2.map.pos.y + fieldSize + 2);
+	std::cout << "Сбито кораблей: " << g.p2.ch;
+	setCursorPosition(g.p2.map.pos.x + fieldSize / 2,
+		g.p2.map.pos.y + fieldSize + 3);
+	std::cout << "Всего ходов: " << g.p2.sh;
 }
 void delPrioritetAll(Coordinate* &pri, int &count) {
 	delete[] pri;
@@ -530,7 +547,7 @@ bool fier(Player& player, Player& opponent, Coordinate cFier) {
 		Ship shipStrike = isShipDestroyed(opponent.map.m, cFier);
 		if (shipStrike.count) {
 			player.ch++;
-			delClearAndOther(player, opponent, shipStrike);
+			markAndClearShipPerimeter(player, opponent, shipStrike);
 		}
 		int Cships = sizeof(shipSize) / sizeof(shipSize[0]);
 		if (player.ch != Cships) {
@@ -538,16 +555,15 @@ bool fier(Player& player, Player& opponent, Coordinate cFier) {
 			setCursorPosition(player.map.pos.x + fieldSize / 2,
 				player.map.pos.y + fieldSize + 2);
 			std::cout << "Сбито кораблей: " << player.ch;
-			return true;
+			return true; //Ход продолжается
 		}
-			
-		else return false;
+		else return false; //Ход завершон если корабли закончились
 	}
 	else {
 		numToColor(2);
 		std::cout << numToCharShip(2);
 		opponent.map.m[cFier.y][cFier.x] = 2; //Обозначаем что на клетке промах
-		return false;
+		return false;//Ход завершон
 	}
 }
 bool stupidBotPlay(Game& g, Player& player, Player& opponent) {
@@ -783,25 +799,7 @@ void creatingPlayers(Game& g) {
 }
 void startGame(Game &g) {
 	showGame(g);
-	setCursorPosition(g.p1.map.pos.x + fieldSize / 2,
-		g.p1.map.pos.y - 2);
-	std::cout << ((g.option.humanPlay) ? "Игрок" : "Бот №1");
-	setCursorPosition(g.p1.map.pos.x + fieldSize / 2,
-		g.p1.map.pos.y + fieldSize + 2);
-	std::cout << "Сбито кораблей: " << g.p1.ch;
-	setCursorPosition(g.p1.map.pos.x + fieldSize / 2,
-		g.p1.map.pos.y + fieldSize + 3);
-	std::cout << "Всего ходов: " << g.p1.sh;
-
-	setCursorPosition(g.p2.map.pos.x + fieldSize / 2,
-		g.p2.map.pos.y - 2);
-	std::cout << ((g.option.humanPlay) ? "Бот" : "Бот №2");
-	setCursorPosition(g.p2.map.pos.x + fieldSize / 2,
-		g.p2.map.pos.y + fieldSize + 2);
-	std::cout << "Сбито кораблей: " << g.p2.ch;
-	setCursorPosition(g.p2.map.pos.x + fieldSize / 2,
-		g.p2.map.pos.y + fieldSize + 3);
-	std::cout << "Всего ходов: " << g.p2.sh;
+	
 
 	creatingPlayers(g);
 	int countShip = sizeof(shipSize) / sizeof(shipSize[0]);

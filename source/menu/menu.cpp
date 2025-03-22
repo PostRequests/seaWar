@@ -37,10 +37,7 @@ void redrawItem(Menu1 m) {
 	setCursorPosition(0, 0);
 	resetColor();
 }
-/// <summary>
 /// Печатает элементы меню на экране
-/// </summary>
-/// <param name="m">Структура меню</param>
 void showItemMenu(Menu1 m) {
 	m.visible = true;
 	if (m.border) {

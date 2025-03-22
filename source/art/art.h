@@ -8,12 +8,15 @@ void draws();
 void printSheep(Coordinate coordinate);
 //Рисуют лого SeaWar по указанным координатам
 void printLog(Coordinate coordinate);
+//Правила размещения кораблей
 void printPlacementRulles(Coordinate cp);
 //Выводит на экран правила игры
 void printGameRules(Coordinate coordinate);
 //Рисует катру поля
 void showT(Coordinate coordinate, int** table);
+//Задает цвет, текущему номеру
 void numToColor(int num);
+//Задает элемент текущему номеру
 const char* numToCharShip(int num);
 /// <summary>
 /// Печатает линию

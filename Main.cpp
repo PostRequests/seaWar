@@ -12,7 +12,7 @@ void main2();
 int main()
 {
     //
-    gitPush("Все готово, осталось провести рефакторинг");
+    gitPush("Готово к экзамену");
     /*Game g;
     menuPause(g);*/
     srand(time(0));
